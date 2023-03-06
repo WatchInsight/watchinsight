@@ -13,3 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+receiver:
+  which: otel
+  otel:
+
+
+storage:
+  which: clickhouse
+  clickhouse:
+  elasticsearch:
+
