@@ -13,9 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+core:
+  which: default
+  default:
+    ##provider transports for http&grpc&kafka
+    transports:
+      http:
+      grpc:
+      kafka:
+
 receiver:
-  which: otel
-  otel:
+  ##data format support otlp&meter
+  which: otlp,meter
+  otlp:
+  meter:
+
 
 
 storage:
