@@ -18,10 +18,13 @@
 
 package org.watchinsight.core.configuration;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import lombok.Getter;
+import org.watchinsight.core.utils.EmptyUtils;
 
 /**
  * @author Created by gerry
@@ -31,7 +34,8 @@ public class ApplicationConfiguration {
     
     private Map<String, ModuleConfiguration> modules = Maps.newConcurrentMap();
     
-    public void addModule(final String moduleName, final ModuleConfiguration configuration) {
+    public void addModule(final String module, final List<ProviderConfiguration> providers) {
+    
     }
     
     /**
@@ -40,6 +44,16 @@ public class ApplicationConfiguration {
     public static class ModuleConfiguration {
         
         private Map<String, List<ProviderConfiguration>> providers = Maps.newConcurrentMap();
+        
+        public void addModule(final String name, ProviderConfiguration configuration) {
+            final String provider = providers.keySet().stream().filter(_name -> _name.equals(name)).findFirst()
+                .orElse(null);
+            if (EmptyUtils.isEmpty(provider)) {
+                providers.put(name, Lists.newArrayList(configuration));
+            } else {
+                providers.get(name).add(configuration);
+            }
+        }
     }
     
     /**
@@ -47,9 +61,15 @@ public class ApplicationConfiguration {
      */
     public static class ProviderConfiguration {
         
+        @Getter
         private String name;
         
         private Properties properties;
+        
+        public ProviderConfiguration(String name, Properties properties) {
+            this.name = name;
+            this.properties = properties;
+        }
     }
     
 }

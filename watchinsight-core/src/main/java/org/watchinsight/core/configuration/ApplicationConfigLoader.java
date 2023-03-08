@@ -20,9 +20,12 @@ package org.watchinsight.core.configuration;
 
 import java.io.FileNotFoundException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
+import org.watchinsight.core.configuration.ApplicationConfiguration.ProviderConfiguration;
 import org.watchinsight.core.utils.EmptyUtils;
 import org.watchinsight.core.utils.ResourceUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -33,6 +36,8 @@ import org.yaml.snakeyaml.Yaml;
  */
 @Slf4j
 public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfiguration> {
+    
+    private final static String CHOICES = "choices";
     
     private Yaml yaml = new Yaml();
     
@@ -62,18 +67,38 @@ public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfigur
          */
     }
     
-    //{"core":{"choices":["aaa","bbb"],"aaa":{"k1":"v1"}, "bbb":{"k1":"v1"}}}
     private void loadModule(final Map<String, Map<String, Object>> config,
         final ApplicationConfiguration configuration) {
         for (String moduleName : config.keySet()) {
-            ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
-//            configuration.addModule(moduleName, config.get(moduleName));
+            configuration.addModule(moduleName, loadProviders(config.get(moduleName)));
         }
     }
     
-    private void loadModule(final Map<String, Object> modules) {
+    private List<ProviderConfiguration> loadProviders(final Map<String, Object> config) {
+        final String[] choices = (String[]) config.get(CHOICES);
+        final List<ProviderConfiguration> providers = new ArrayList<>(choices.length);
+        for (String choice : choices) {
+            providers.add(choice(choice, config));
+        }
+        return providers;
     }
     
-    private void loadProvider(final String moduleName) {
+    private ProviderConfiguration choice(final String choice, final Map<String, Object> config) {
+        Properties properties = new Properties();
+        Map<String, ?> propertyConfig = (Map<String, ?>) config.get(choice);
+        if (EmptyUtils.isNotEmpty(propertyConfig)) {
+            propertyConfig.forEach((propertyName, propertyValue) -> {
+                if (propertyValue instanceof Map) {
+                    Properties subProperties = new Properties();
+                    ((Map) propertyValue).forEach((key, value) -> {
+                        subProperties.put(key, value);
+                    });
+                    properties.put(propertyName, subProperties);
+                } else {
+                    properties.put(propertyName, propertyValue);
+                }
+            });
+        }
+        return new ProviderConfiguration(choice, properties);
     }
 }
