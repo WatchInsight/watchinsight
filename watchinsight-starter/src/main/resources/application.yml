@@ -14,7 +14,7 @@
 # limitations under the License.
 
 core:
-  which: default
+  choices: [ default ]
   default:
     ##provider transports for http&grpc&kafka
     transports:
@@ -24,14 +24,14 @@ core:
 
 receiver:
   ##data format support otlp&meter
-  which: otlp,meter
+  choices: [ otlp,meter ]
   otlp:
   meter:
 
 
 
 storage:
-  which: clickhouse
+  choices: clickhouse
   clickhouse:
   elasticsearch:
 

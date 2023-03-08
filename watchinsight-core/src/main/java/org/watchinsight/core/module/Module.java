@@ -16,31 +16,14 @@
  *
  */
 
-package org.watchinsight.core;
-
-import org.yaml.snakeyaml.Yaml;
+package org.watchinsight.core.module;
 
 /**
- * From yml file load resource
- *
  * @author Created by gerry
- * @date 2023-03-06-23:33
+ * @date 2023-03-08-22:35
  */
-public class ModuleResourceLoader implements ResourceLoader {
+public enum Module {
     
-    private String fileName;
-    
-    private Yaml yaml;
-    
-    public ModuleResourceLoader(final String fileName) {
-        this.fileName = fileName;
-        this.yaml = new Yaml();
-    }
-    /**
-     * 1、读取目标路径的配置文件
-     * 2、解析配置文件，转换成可操作的ModuleDefinition对象
-     * 3、通过ModuleDefinition可获得配置文件中配置的相关模块
-     * 4、通过ModuleFactory可对ModuleDefinition进行初始化
-     */
+    CORE,
     
 }

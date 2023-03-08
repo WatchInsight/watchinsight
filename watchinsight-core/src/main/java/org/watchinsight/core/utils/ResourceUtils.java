@@ -16,7 +16,7 @@
  *
  */
 
-package org.watchinsight.core;
+package org.watchinsight.core.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,30 +32,30 @@ import java.util.stream.Collectors;
 /**
  * Resource file read
  */
-public interface ResourceLoader {
+public final class ResourceUtils {
     
-    default Reader read(String fileName) throws FileNotFoundException {
+    public static Reader read(String fileName) throws FileNotFoundException {
         return new InputStreamReader(readToStream(fileName));
     }
     
-    default InputStream readToStream(String fileName) throws FileNotFoundException {
-        URL url = ResourceLoader.class.getClassLoader().getResource(fileName);
+    public static InputStream readToStream(String fileName) throws FileNotFoundException {
+        URL url = ResourceUtils.class.getClassLoader().getResource(fileName);
         if (url == null) {
             throw new FileNotFoundException("file not found: " + fileName);
         }
-        return ResourceLoader.class.getClassLoader().getResourceAsStream(fileName);
+        return ResourceUtils.class.getClassLoader().getResourceAsStream(fileName);
     }
     
-    default File[] getPathFiles(String path) throws FileNotFoundException {
-        URL url = ResourceLoader.class.getClassLoader().getResource(path);
+    public static File[] getPathFiles(String path) throws FileNotFoundException {
+        URL url = ResourceUtils.class.getClassLoader().getResource(path);
         if (url == null) {
             throw new FileNotFoundException("path not found: " + path);
         }
         return Objects.requireNonNull(new File(url.getPath()).listFiles(), "No files in " + path);
     }
     
-    default File[] getPathFiles(String parentPath, String[] fileNames) throws FileNotFoundException {
-        URL url = ResourceLoader.class.getClassLoader().getResource(parentPath);
+    public static File[] getPathFiles(String parentPath, String[] fileNames) throws FileNotFoundException {
+        URL url = ResourceUtils.class.getClassLoader().getResource(parentPath);
         if (url == null) {
             throw new FileNotFoundException("path not found: " + parentPath);
         }
