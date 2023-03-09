@@ -16,23 +16,26 @@
  *
  */
 
-package org.watchinsight.starter;
+package org.watchinsight.core.exception;
 
-import java.io.FileNotFoundException;
-import org.watchinsight.core.configuration.ApplicationConfigLoader;
-import org.watchinsight.core.configuration.ApplicationConfiguration;
-import org.watchinsight.core.configuration.ConfigLoader;
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-05-22:59
+ * @date 2023-03-09-00:46
  */
-public class WatchInsightStarter {
+public class ConfigurationException extends RuntimeException implements Supplier<ConfigurationException> {
     
-    public static void main(String[] args) throws FileNotFoundException {
-        final ConfigLoader<ApplicationConfiguration> configLoader = new ApplicationConfigLoader();
-        configLoader.load("application.yml");
-        //ModuleManager
+    public ConfigurationException(final String s) {
+        super(s);
     }
     
+    public ConfigurationException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+    
+    @Override
+    public ConfigurationException get() {
+        return this;
+    }
 }

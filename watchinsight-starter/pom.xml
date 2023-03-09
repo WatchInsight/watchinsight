@@ -32,5 +32,11 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
   </properties>
-
+  <dependencies>
+    <dependency>
+      <groupId>org.watchinsight</groupId>
+      <artifactId>watchinsight-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

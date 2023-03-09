@@ -23,9 +23,11 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ProviderConfiguration;
+import org.watchinsight.core.exception.ConfigurationException;
 import org.watchinsight.core.utils.EmptyUtils;
 import org.watchinsight.core.utils.ResourceUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -54,51 +56,43 @@ public class ApplicationConfigLoader implements ConfigLoader<ApplicationConfigur
         final Reader reader = ResourceUtils.read(fileName);
         final Map<String, Map<String, Object>> config = yaml.loadAs(reader, Map.class);
         if (EmptyUtils.isEmpty(config)) {
-            log.warn("Load file [{}] configuration is null", fileName);
-            return;
+            throw new ConfigurationException("Load file [" + fileName + "] configuration is null");
         }
         //Load config to ModuleConfiguration
-        loadModule(config, configuration);
-        /**
-         * 1、读取目标路径的配置文件
-         * 2、解析配置文件，转换成可操作的ModuleDefine对象
-         * 3、通过ModuleDefine可获得配置文件中配置的相关模块
-         * 4、通过ModuleFactory可对ModuleDefine进行初始化
-         */
-    }
-    
-    private void loadModule(final Map<String, Map<String, Object>> config,
-        final ApplicationConfiguration configuration) {
-        for (String moduleName : config.keySet()) {
-            configuration.addModule(moduleName, loadProviders(config.get(moduleName)));
-        }
+        config.forEach((module, providers) -> configuration.addModule(module, loadProviders(config.get(module))));
     }
     
     private List<ProviderConfiguration> loadProviders(final Map<String, Object> config) {
-        final String[] choices = (String[]) config.get(CHOICES);
-        final List<ProviderConfiguration> providers = new ArrayList<>(choices.length);
+        final List<String> choices = (ArrayList<String>) config.get(CHOICES);
+        final List<ProviderConfiguration> providers = new ArrayList<>(choices.size());
         for (String choice : choices) {
-            providers.add(choice(choice, config));
+            ProviderConfiguration providerConfiguration = choice(choice, config);
+            if (Objects.isNull(providerConfiguration)) {
+                continue;
+            }
+            providers.add(providerConfiguration);
         }
         return providers;
     }
     
     private ProviderConfiguration choice(final String choice, final Map<String, Object> config) {
-        Properties properties = new Properties();
-        Map<String, ?> propertyConfig = (Map<String, ?>) config.get(choice);
-        if (EmptyUtils.isNotEmpty(propertyConfig)) {
-            propertyConfig.forEach((propertyName, propertyValue) -> {
-                if (propertyValue instanceof Map) {
-                    Properties subProperties = new Properties();
-                    ((Map) propertyValue).forEach((key, value) -> {
-                        subProperties.put(key, value);
-                    });
-                    properties.put(propertyName, subProperties);
-                } else {
-                    properties.put(propertyName, propertyValue);
-                }
-            });
+        final Map<String, ?> propertyConfig = (Map<String, ?>) config.get(choice);
+        if (EmptyUtils.isEmpty(propertyConfig)) {
+            log.warn("Choice module's provider [{}], but no define, ignore.", choice);
+            return null;
         }
+        final Properties properties = new Properties();
+        propertyConfig.forEach((propertyName, propertyValue) -> {
+            if (propertyValue instanceof Map) {
+                Properties subProperties = new Properties();
+                ((Map) propertyValue).forEach((key, value) -> {
+                    subProperties.put(key, value);
+                });
+                properties.put(propertyName, subProperties);
+            } else {
+                properties.put(propertyName, propertyValue);
+            }
+        });
         return new ProviderConfiguration(choice, properties);
     }
 }
