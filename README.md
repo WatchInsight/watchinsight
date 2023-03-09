@@ -1,6 +1,6 @@
 WatchInsight
 ==========
-**WatchInsight** is an observability platform built on Metrics, Tracing, Logging, Events, and Profiling, providing microservice monitoring, cloud-native infrastructure monitoring, business monitoring, troubleshooting tools, and continuous analysis
+**WatchInsight** is an observability platform built on Metrics, Tracing, Logging, Alert, Events, and Profiling, providing microservice monitoring, cloud-native infrastructure monitoring, business monitoring, troubleshooting tools, and continuous analysis
 
 # Documentation
 # Quick Start
