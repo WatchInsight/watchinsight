@@ -40,7 +40,7 @@ public class DefaultModuleManager implements ModuleManager {
     }
     
     @Override
-    public void init() {
+    public synchronized void init() {
         final ServiceLoader<ModuleDefine> moduleDefines = ServiceLoader.load(ModuleDefine.class);
         final Set<String> modules = configuration.modules();
         for (ModuleDefine define : moduleDefines) {
@@ -51,9 +51,24 @@ public class DefaultModuleManager implements ModuleManager {
             }
             final ModuleConfiguration moduleConfiguration = configuration.getModuleConfiguration(module);
             final ServiceLoader<ProviderDefine> providerDefines = ServiceLoader.load(ProviderDefine.class);
-            //初始化
+            //prepare
             define.prepare(this, moduleConfiguration, providerDefines);
         }
+        //start
+        //after
+        //stop
+    }
+    
+    @Override
+    public void start() {
+    }
+    
+    @Override
+    public void after() {
+    }
+    
+    @Override
+    public void stop() {
     }
     
     @Override

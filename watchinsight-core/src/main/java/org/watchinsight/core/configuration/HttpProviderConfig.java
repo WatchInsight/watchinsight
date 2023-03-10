@@ -16,39 +16,16 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core.configuration;
+
+import lombok.Data;
+import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-22:46
+ * @date 2023-03-11-00:06
  */
-public interface ModuleManager {
-    
-    /**
-     * Init module
-     */
-    void init();
-    
-    /**
-     * Start module
-     */
-    void start();
-    
-    /**
-     * After module
-     */
-    void after();
-    
-    /**
-     * Stop module
-     */
-    void stop();
-    
-    /**
-     * Is exist module
-     *
-     * @param module
-     * @return
-     */
-    boolean has(String module);
+@Data
+public class HttpProviderConfig implements ProviderConfig {
+
 }

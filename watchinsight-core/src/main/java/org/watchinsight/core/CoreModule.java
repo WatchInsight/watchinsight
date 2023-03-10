@@ -26,9 +26,11 @@ import org.watchinsight.core.module.AbstractModuleDefine;
  */
 public class CoreModule extends AbstractModuleDefine {
     
+    public static final String CORE = "core";
+    
     @Override
     public String module() {
-        return "core";
+        return CORE;
     }
     
 }

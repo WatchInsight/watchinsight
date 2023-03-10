@@ -18,20 +18,29 @@
 
 package org.watchinsight.core;
 
-import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.provider.AbstractProviderDefine;
+import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
  * @date 2023-03-10-23:22
  */
-public class CoreGprcProvider implements ProviderDefine {
+public class CoreGprcProvider extends AbstractProviderDefine {
+    
+    public static final String GRPC = "grpc";
     
     @Override
     public String name() {
-        return "grpc";
+        return GRPC;
+    }
+    
+    @Override
+    public <T extends ProviderConfig> T createConfig() {
+        return null;
     }
     
     @Override
     public void prepare() {
     }
+    
 }

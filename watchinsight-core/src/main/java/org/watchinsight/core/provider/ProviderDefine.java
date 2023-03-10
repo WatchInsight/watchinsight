@@ -32,6 +32,14 @@ public interface ProviderDefine {
     String name();
     
     /**
+     * Create config
+     *
+     * @param <T>
+     * @return
+     */
+    <T extends ProviderConfig> T createConfig();
+    
+    /**
      * Provider prepare
      */
     void prepare();

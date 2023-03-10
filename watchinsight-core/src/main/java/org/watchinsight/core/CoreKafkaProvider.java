@@ -16,39 +16,31 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core;
+
+import org.watchinsight.core.provider.AbstractProviderDefine;
+import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-22:46
+ * @date 2023-03-10-23:22
  */
-public interface ModuleManager {
+public class CoreKafkaProvider extends AbstractProviderDefine {
     
-    /**
-     * Init module
-     */
-    void init();
+    public static final String KAFKA = "kafka";
     
-    /**
-     * Start module
-     */
-    void start();
+    @Override
+    public String name() {
+        return KAFKA;
+    }
     
-    /**
-     * After module
-     */
-    void after();
+    @Override
+    public <T extends ProviderConfig> T createConfig() {
+        return null;
+    }
     
-    /**
-     * Stop module
-     */
-    void stop();
+    @Override
+    public void prepare() {
+    }
     
-    /**
-     * Is exist module
-     *
-     * @param module
-     * @return
-     */
-    boolean has(String module);
 }

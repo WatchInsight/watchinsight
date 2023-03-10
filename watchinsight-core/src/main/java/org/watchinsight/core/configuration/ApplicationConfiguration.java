@@ -90,6 +90,11 @@ public class ApplicationConfiguration {
             providers.add(configuration);
         }
         
+        public ProviderConfiguration find(String provider) {
+            return providers.stream().filter(_provider -> _provider.getName().equals(provider)).findFirst()
+                .orElse(null);
+        }
+        
         public boolean has(String provider) {
             return providers.stream().filter(_provider -> _provider.getName().equals(provider)).findAny().isPresent();
         }

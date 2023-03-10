@@ -16,39 +16,12 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core.provider;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-22:46
+ * @date 2023-03-10-23:20
  */
-public interface ModuleManager {
+public abstract class AbstractProviderDefine implements ProviderDefine {
     
-    /**
-     * Init module
-     */
-    void init();
-    
-    /**
-     * Start module
-     */
-    void start();
-    
-    /**
-     * After module
-     */
-    void after();
-    
-    /**
-     * Stop module
-     */
-    void stop();
-    
-    /**
-     * Is exist module
-     *
-     * @param module
-     * @return
-     */
-    boolean has(String module);
 }

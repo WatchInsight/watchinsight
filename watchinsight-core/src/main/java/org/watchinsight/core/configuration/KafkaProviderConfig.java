@@ -18,10 +18,14 @@
 
 package org.watchinsight.core.configuration;
 
+import lombok.Data;
+import org.watchinsight.core.provider.ProviderConfig;
+
 /**
  * @author Created by gerry
- * @date 2023-03-10-23:47
+ * @date 2023-03-11-00:06
  */
-public interface ModuleConfig {
+@Data
+public class KafkaProviderConfig implements ProviderConfig {
 
 }

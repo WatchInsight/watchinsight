@@ -16,14 +16,26 @@
  *
  */
 
-package org.watchinsight.core.configuration;
+package org.watchinsight.core.exception;
+
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-23:48
+ * @date 2023-03-09-00:46
  */
-public interface ConfigCreator<T extends ModuleConfig> {
-
-    Class<T> type();
+public class ProviderConfigException extends RuntimeException implements Supplier<ProviderConfigException> {
     
+    public ProviderConfigException(final String s) {
+        super(s);
+    }
+    
+    public ProviderConfigException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+    
+    @Override
+    public ProviderConfigException get() {
+        return this;
+    }
 }

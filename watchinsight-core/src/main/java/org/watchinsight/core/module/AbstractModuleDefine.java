@@ -18,9 +18,15 @@
 
 package org.watchinsight.core.module;
 
+import java.lang.reflect.Field;
+import java.util.Enumeration;
+import java.util.Properties;
 import java.util.ServiceLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
+import org.watchinsight.core.configuration.ApplicationConfiguration.ProviderConfiguration;
+import org.watchinsight.core.exception.ProviderConfigException;
+import org.watchinsight.core.provider.ProviderConfig;
 import org.watchinsight.core.provider.ProviderDefine;
 
 /**
@@ -40,7 +46,53 @@ public abstract class AbstractModuleDefine implements ModuleDefine {
                 continue;
             }
             //Init config
-            providerDefine.prepare();
+            final ProviderConfig config = providerDefine.createConfig();
+            final ProviderConfiguration providerConfiguration = moduleConfiguration.find(provider);
+            try {
+                //Invoke prepare
+                prepare(providerDefine, providerConfiguration.getProperties(), config);
+            } catch (IllegalAccessException e) {
+                throw new ProviderConfigException(
+                    "Provider [" + provider + "] config transport to config bean failure.", e);
+            }
         }
     }
+    
+    private void prepare(ProviderDefine providerDefine, Properties properties, ProviderConfig config)
+        throws IllegalAccessException {
+        copyProperties(properties, config, providerDefine.name());
+        providerDefine.prepare();
+    }
+    
+    private void copyProperties(Properties src, ProviderConfig dest, String provider) throws IllegalAccessException {
+        if (dest == null) {
+            return;
+        }
+        Enumeration<?> propertyNames = src.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String propertyName = (String) propertyNames.nextElement();
+            Class<? extends ProviderConfig> destClass = dest.getClass();
+            try {
+                Field field = getDeclaredField(destClass, propertyName);
+                field.setAccessible(true);
+                field.set(dest, src.get(propertyName));
+            } catch (NoSuchFieldException e) {
+                log.warn(e.getMessage(), propertyName + " setting is not supported in [{}] provider", provider);
+            }
+        }
+    }
+    
+    private Field getDeclaredField(Class<?> destClass, String fieldName) throws NoSuchFieldException {
+        if (destClass != null) {
+            Field[] fields = destClass.getDeclaredFields();
+            for (Field field : fields) {
+                if (field.getName().equals(fieldName)) {
+                    return field;
+                }
+            }
+            return getDeclaredField(destClass.getSuperclass(), fieldName);
+        }
+        throw new NoSuchFieldException();
+    }
+    
 }

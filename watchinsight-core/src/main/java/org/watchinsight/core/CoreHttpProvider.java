@@ -16,39 +16,34 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core;
+
+import org.watchinsight.core.configuration.HttpProviderConfig;
+import org.watchinsight.core.provider.AbstractProviderDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-22:46
+ * @date 2023-03-10-23:22
  */
-public interface ModuleManager {
+public class CoreHttpProvider extends AbstractProviderDefine {
     
-    /**
-     * Init module
-     */
-    void init();
+    public static final String HTTP = "http";
     
-    /**
-     * Start module
-     */
-    void start();
+    private HttpProviderConfig providerConfig;
     
-    /**
-     * After module
-     */
-    void after();
+    @Override
+    public String name() {
+        return HTTP;
+    }
     
-    /**
-     * Stop module
-     */
-    void stop();
+    @Override
+    public HttpProviderConfig createConfig() {
+        this.providerConfig = new HttpProviderConfig();
+        return this.providerConfig;
+    }
     
-    /**
-     * Is exist module
-     *
-     * @param module
-     * @return
-     */
-    boolean has(String module);
+    @Override
+    public void prepare() {
+    }
+    
 }
