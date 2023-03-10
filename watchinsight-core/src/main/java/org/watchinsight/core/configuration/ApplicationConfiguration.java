@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,14 @@ import org.watchinsight.core.utils.EmptyUtils;
 public class ApplicationConfiguration {
     
     private Map<String, ModuleConfiguration> modules = Maps.newConcurrentMap();
+    
+    public ModuleConfiguration getModuleConfiguration(final String module) {
+        return modules.get(module);
+    }
+    
+    public Set<String> modules() {
+        return modules.keySet();
+    }
     
     public void addModule(final String module, final List<ProviderConfiguration> providers) {
         if (EmptyUtils.isEmpty(providers)) {
@@ -79,6 +88,10 @@ public class ApplicationConfiguration {
                     "Add provider [" + configuration.getName() + "] duplicate, please check yml file.");
             }
             providers.add(configuration);
+        }
+        
+        public boolean has(String provider) {
+            return providers.stream().filter(_provider -> _provider.getName().equals(provider)).findAny().isPresent();
         }
     }
     

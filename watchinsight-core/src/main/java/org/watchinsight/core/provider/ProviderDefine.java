@@ -16,14 +16,23 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core.provider;
 
 /**
  * @author Created by gerry
- * @date 2023-03-08-22:35
+ * @date 2023-03-10-23:20
  */
-public enum Module {
+public interface ProviderDefine {
     
-    CORE,
+    /**
+     * Provider's name
+     *
+     * @return
+     */
+    String name();
     
+    /**
+     * Provider prepare
+     */
+    void prepare();
 }

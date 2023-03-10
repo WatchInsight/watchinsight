@@ -18,27 +18,22 @@
 
 package org.watchinsight.core.module;
 
-import java.util.ServiceLoader;
-import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
-import org.watchinsight.core.provider.ProviderDefine;
-
 /**
  * @author Created by gerry
- * @date 2023-03-08-22:35
+ * @date 2023-03-10-22:46
  */
-public interface ModuleDefine {
+public interface ModuleManager {
     
     /**
-     * module name
+     * Init module
+     */
+    void init();
+    
+    /**
+     * Is exist module
+     *
+     * @param module
      * @return
      */
-    String module();
-    
-    /**
-     *  prepare
-     * @param manager
-     * @param moduleConfiguration
-     * @param providerDefines
-     */
-    void prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration, ServiceLoader<ProviderDefine> providerDefines);
+    boolean has(String module);
 }

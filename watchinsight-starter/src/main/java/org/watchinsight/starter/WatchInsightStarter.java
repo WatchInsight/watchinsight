@@ -33,6 +33,7 @@ public class WatchInsightStarter {
         final ConfigLoader<ApplicationConfiguration> configLoader = new ApplicationConfigLoader();
         configLoader.load("application.yml");
         //ModuleManager
+        //Step1：Module Loader and then load providers
     }
     
 }

@@ -19,6 +19,7 @@
 package org.watchinsight.core.module;
 
 import java.util.ServiceLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
 import org.watchinsight.core.provider.ProviderDefine;
 
@@ -26,19 +27,20 @@ import org.watchinsight.core.provider.ProviderDefine;
  * @author Created by gerry
  * @date 2023-03-08-22:35
  */
-public interface ModuleDefine {
+@Slf4j
+public abstract class AbstractModuleDefine implements ModuleDefine {
     
-    /**
-     * module name
-     * @return
-     */
-    String module();
-    
-    /**
-     *  prepare
-     * @param manager
-     * @param moduleConfiguration
-     * @param providerDefines
-     */
-    void prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration, ServiceLoader<ProviderDefine> providerDefines);
+    @Override
+    public void prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration,
+        ServiceLoader<ProviderDefine> providerDefines) {
+        for (ProviderDefine providerDefine : providerDefines) {
+            final String provider = providerDefine.name();
+            if (!moduleConfiguration.has(provider)) {
+                log.warn("[{}] provider is undefined, ignore.", provider);
+                continue;
+            }
+            //Init config
+            providerDefine.prepare();
+        }
+    }
 }

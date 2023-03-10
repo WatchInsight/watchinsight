@@ -16,29 +16,19 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core;
 
-import java.util.ServiceLoader;
-import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
-import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.module.AbstractModuleDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-08-22:35
+ * @date 2023-03-10-22:58
  */
-public interface ModuleDefine {
+public class CoreModule extends AbstractModuleDefine {
     
-    /**
-     * module name
-     * @return
-     */
-    String module();
+    @Override
+    public String module() {
+        return "core";
+    }
     
-    /**
-     *  prepare
-     * @param manager
-     * @param moduleConfiguration
-     * @param providerDefines
-     */
-    void prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration, ServiceLoader<ProviderDefine> providerDefines);
 }
