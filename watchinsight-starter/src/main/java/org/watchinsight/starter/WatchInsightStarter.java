@@ -23,7 +23,6 @@ import org.watchinsight.core.configuration.ApplicationConfigLoader;
 import org.watchinsight.core.configuration.ApplicationConfiguration;
 import org.watchinsight.core.configuration.ConfigLoader;
 import org.watchinsight.core.module.DefaultModuleManager;
-import org.watchinsight.core.module.ModuleManager;
 
 /**
  * @author Created by gerry
@@ -37,7 +36,7 @@ public class WatchInsightStarter {
         //Load yml to application configuration
         final ApplicationConfiguration configuration = configLoader.load("application.yml");
         //Build module manager to init module & providers
-        final ModuleManager manager = new DefaultModuleManager(configuration);
+        final DefaultModuleManager manager = new DefaultModuleManager(configuration);
         manager.init();
     }
     

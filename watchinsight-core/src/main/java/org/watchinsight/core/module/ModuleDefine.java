@@ -40,7 +40,7 @@ public abstract class ModuleDefine {
     
     public abstract String module();
     
-    public List<ProviderDefine> prepare(ModuleConfiguration moduleConfiguration,
+    public List<ProviderDefine> prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration,
         ServiceLoader<ProviderDefine> providerDefines) {
         final List<ProviderDefine> providers = new ArrayList<>();
         for (ProviderDefine providerDefine : providerDefines) {
@@ -55,6 +55,7 @@ public abstract class ModuleDefine {
             try {
                 //Invoke prepare
                 prepare(providerDefine, providerConfiguration.getProperties(), config);
+                providerDefine.addModuleManager(manager);
                 providers.add(providerDefine);
             } catch (IllegalAccessException e) {
                 throw new ProviderConfigException(

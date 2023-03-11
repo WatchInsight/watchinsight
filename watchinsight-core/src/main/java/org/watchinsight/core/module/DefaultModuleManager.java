@@ -27,7 +27,9 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.ApplicationConfiguration;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
+import org.watchinsight.core.exception.ProviderNotFoundException;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
@@ -44,7 +46,9 @@ public class DefaultModuleManager implements ModuleManager {
         this.configuration = configuration;
     }
     
-    @Override
+    /**
+     * Init module
+     */
     public synchronized void init() {
         final ServiceLoader<ModuleDefine> moduleDefines = ServiceLoader.load(ModuleDefine.class);
         final Set<String> modules = configuration.modules();
@@ -57,7 +61,7 @@ public class DefaultModuleManager implements ModuleManager {
             final ModuleConfiguration moduleConfiguration = configuration.getModuleConfiguration(module);
             final ServiceLoader<ProviderDefine> providerDefines = ServiceLoader.load(ProviderDefine.class);
             //prepare
-            final List<ProviderDefine> providers = define.prepare(moduleConfiguration, providerDefines);
+            final List<ProviderDefine> providers = define.prepare(this, moduleConfiguration, providerDefines);
             this.moduleDefines.put(define, providers);
         }
         //start
@@ -97,6 +101,21 @@ public class DefaultModuleManager implements ModuleManager {
     @Override
     public boolean has(String module) {
         return Objects.nonNull(configuration.getModuleConfiguration(module));
+    }
+    
+    @Override
+    public ServiceDefine find(String module, String provider) {
+        for (ModuleDefine moduleDefine : moduleDefines.keySet()) {
+            if (!moduleDefine.module().equals(module)) {
+                continue;
+            }
+            for (ProviderDefine providerDefine : moduleDefines.get(moduleDefine)) {
+                if (providerDefine.name().equals(provider)) {
+                    return providerDefine;
+                }
+            }
+        }
+        throw new ProviderNotFoundException("Module [" + module + "] & provider [" + provider + "] not found.");
     }
     
 }

@@ -86,6 +86,7 @@ public class CoreGprcProvider extends ProviderDefine {
     @Override
     public void stop() {
         try {
+            log.info("Netty grpc server closed!");
             server.shutdown();
         } catch (Exception e) {
             throw new ModuleStopException(e.getMessage(), e);

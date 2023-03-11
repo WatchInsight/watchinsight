@@ -16,32 +16,25 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core.exception;
 
-import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.service.ServiceDefine;
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-22:46
+ * @date 2021-02-28-9:58 PM
  */
-public interface ModuleManager {
-    
-    /**
-     * Is exist module
-     *
-     * @param module
-     * @return
-     */
-    boolean has(String module);
-    
-    /**
-     * By module & provider find need provider
-     *
-     * @param module
-     * @param provider
-     * @return
-     */
-    ServiceDefine find(String module, String provider);
-    
+public class ServiceNotFoundException extends RuntimeException implements Supplier<ServiceNotFoundException> {
+    public ServiceNotFoundException(final String s) {
+        super(s);
+    }
+
+    public ServiceNotFoundException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+
+    @Override
+    public ServiceNotFoundException get() {
+        return this;
+    }
 }

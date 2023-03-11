@@ -28,4 +28,7 @@ import org.watchinsight.core.provider.ProviderConfig;
 @Data
 public class HttpProviderConfig implements ProviderConfig {
 
+    private int port = 19100;
+    
+    private int workThreads;
 }

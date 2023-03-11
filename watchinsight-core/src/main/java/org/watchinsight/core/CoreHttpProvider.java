@@ -71,8 +71,8 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public void start() {
-        bossGroup = new NioEventLoopGroup();
-        workerGroup = new NioEventLoopGroup(100);
+        bossGroup = new NioEventLoopGroup(providerConfig.getWorkThreads());
+        workerGroup = new NioEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap().option(ChannelOption.SO_BACKLOG, 1024)
             .childOption(ChannelOption.TCP_NODELAY, true)
             .childOption(ChannelOption.SO_KEEPALIVE, true)
@@ -87,8 +87,8 @@ public class CoreHttpProvider extends ProviderDefine {
                         .addLast(new HttpServerExpectContinueHandler());
                 }
             });
-        this.channel = b.bind(10000).channel();
-        log.info("Netty http server listening on port " + 10000);
+        this.channel = b.bind(providerConfig.getPort()).channel();
+        log.info("Netty http server listening on port " + providerConfig.getPort());
         System.out.println("http provider started.");
     }
     
@@ -99,10 +99,10 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public void stop() {
+        log.info("Netty HTTP Channel closed!");
         channel.close();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
-        log.info("Netty HTTP Channel closed!");
     }
     
 }

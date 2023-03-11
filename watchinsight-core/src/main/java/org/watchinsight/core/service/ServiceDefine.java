@@ -16,32 +16,31 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core.service;
 
-import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.service.ServiceDefine;
+import org.watchinsight.core.exception.ServiceNotFoundException;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-22:46
+ * @date 2023-03-11-19:27
  */
-public interface ModuleManager {
+public interface ServiceDefine {
     
     /**
-     * Is exist module
+     * register provider service
      *
-     * @param module
-     * @return
+     * @param serviceType class
+     * @param service     Service
+     * @throws ServiceNotFoundException exception
      */
-    boolean has(String module);
+    void register(Class<? extends ServiceDefine> serviceType, ServiceDefine service) throws ServiceNotFoundException;
     
     /**
-     * By module & provider find need provider
+     * get provider service instance
      *
-     * @param module
-     * @param provider
-     * @return
+     * @param clazz source
+     * @param <T>   target
+     * @return T return
      */
-    ServiceDefine find(String module, String provider);
-    
+    <T extends ServiceDefine> T getService(Class<T> clazz);
 }
