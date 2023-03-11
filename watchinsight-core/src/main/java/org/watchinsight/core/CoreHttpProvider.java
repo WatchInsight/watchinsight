@@ -19,13 +19,13 @@
 package org.watchinsight.core;
 
 import org.watchinsight.core.configuration.HttpProviderConfig;
-import org.watchinsight.core.provider.AbstractProviderDefine;
+import org.watchinsight.core.provider.ProviderDefine;
 
 /**
  * @author Created by gerry
  * @date 2023-03-10-23:22
  */
-public class CoreHttpProvider extends AbstractProviderDefine {
+public class CoreHttpProvider extends ProviderDefine {
     
     public static final String HTTP = "http";
     

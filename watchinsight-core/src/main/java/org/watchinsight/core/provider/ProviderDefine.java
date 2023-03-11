@@ -22,14 +22,14 @@ package org.watchinsight.core.provider;
  * @author Created by gerry
  * @date 2023-03-10-23:20
  */
-public interface ProviderDefine {
+public abstract class ProviderDefine {
     
     /**
      * Provider's name
      *
      * @return
      */
-    String name();
+    public abstract String name();
     
     /**
      * Create config
@@ -37,26 +37,26 @@ public interface ProviderDefine {
      * @param <T>
      * @return
      */
-    <T extends ProviderConfig> T createConfig();
+    public abstract <T extends ProviderConfig> T createConfig();
     
     /**
      * Provider prepare
      */
-    void prepare();
+    public abstract void prepare();
     
     /**
      * Provider start
      */
-    void start();
+    public abstract void start();
     
     /**
      * Provider after
      */
-    void after();
+    public abstract void after();
     
     /**
      * Provider stop
      */
-    void stop();
+    public abstract void stop();
     
 }

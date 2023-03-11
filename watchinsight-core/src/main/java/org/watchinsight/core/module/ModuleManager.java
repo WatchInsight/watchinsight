@@ -30,21 +30,6 @@ public interface ModuleManager {
     void init();
     
     /**
-     * Start module
-     */
-    void start();
-    
-    /**
-     * After module
-     */
-    void after();
-    
-    /**
-     * Stop module
-     */
-    void stop();
-    
-    /**
      * Is exist module
      *
      * @param module

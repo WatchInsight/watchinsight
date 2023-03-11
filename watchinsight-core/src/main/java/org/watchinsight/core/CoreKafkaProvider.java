@@ -18,14 +18,14 @@
 
 package org.watchinsight.core;
 
-import org.watchinsight.core.provider.AbstractProviderDefine;
+import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
  * @date 2023-03-10-23:22
  */
-public class CoreKafkaProvider extends AbstractProviderDefine {
+public class CoreKafkaProvider extends ProviderDefine {
     
     public static final String KAFKA = "kafka";
     

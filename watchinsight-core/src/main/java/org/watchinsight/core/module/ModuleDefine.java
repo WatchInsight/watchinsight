@@ -18,27 +18,87 @@
 
 package org.watchinsight.core.module;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.ServiceLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
+import org.watchinsight.core.configuration.ApplicationConfiguration.ProviderConfiguration;
+import org.watchinsight.core.exception.ProviderConfigException;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
  * @date 2023-03-08-22:35
  */
-public interface ModuleDefine {
+@Slf4j
+public abstract class ModuleDefine {
     
-    /**
-     * module name
-     * @return
-     */
-    String module();
+    public abstract String module();
     
-    /**
-     *  prepare
-     * @param moduleConfiguration
-     * @param providerDefines
-     */
-    List<ProviderDefine> prepare(ModuleConfiguration moduleConfiguration, ServiceLoader<ProviderDefine> providerDefines);
+    public List<ProviderDefine> prepare(ModuleConfiguration moduleConfiguration,
+        ServiceLoader<ProviderDefine> providerDefines) {
+        final List<ProviderDefine> providers = new ArrayList<>();
+        for (ProviderDefine providerDefine : providerDefines) {
+            final String provider = providerDefine.name();
+            if (!moduleConfiguration.has(provider)) {
+                log.warn("[{}] provider is undefined, ignore.", provider);
+                continue;
+            }
+            //Init config
+            final ProviderConfig config = providerDefine.createConfig();
+            final ProviderConfiguration providerConfiguration = moduleConfiguration.find(provider);
+            try {
+                //Invoke prepare
+                prepare(providerDefine, providerConfiguration.getProperties(), config);
+                providers.add(providerDefine);
+            } catch (IllegalAccessException e) {
+                throw new ProviderConfigException(
+                    "Provider [" + provider + "] config transport to config bean failure.", e);
+            }
+        }
+        return providers;
+    }
+    
+    private void prepare(ProviderDefine providerDefine, Properties properties, ProviderConfig config)
+        throws IllegalAccessException {
+        copyProperties(properties, config, providerDefine.name());
+        providerDefine.prepare();
+    }
+    
+    private void copyProperties(Properties src, ProviderConfig dest, String provider) throws IllegalAccessException {
+        if (dest == null) {
+            return;
+        }
+        Enumeration<?> propertyNames = src.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String propertyName = (String) propertyNames.nextElement();
+            Class<? extends ProviderConfig> destClass = dest.getClass();
+            try {
+                Field field = getDeclaredField(destClass, propertyName);
+                field.setAccessible(true);
+                field.set(dest, src.get(propertyName));
+            } catch (NoSuchFieldException e) {
+                log.warn(e.getMessage(), propertyName + " setting is not supported in [{}] provider", provider);
+            }
+        }
+    }
+    
+    private Field getDeclaredField(Class<?> destClass, String fieldName) throws NoSuchFieldException {
+        if (destClass != null) {
+            Field[] fields = destClass.getDeclaredFields();
+            for (Field field : fields) {
+                if (field.getName().equals(fieldName)) {
+                    return field;
+                }
+            }
+            return getDeclaredField(destClass.getSuperclass(), fieldName);
+        }
+        throw new NoSuchFieldException();
+    }
+    
 }

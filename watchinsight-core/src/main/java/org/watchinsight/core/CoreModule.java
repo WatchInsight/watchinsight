@@ -18,13 +18,13 @@
 
 package org.watchinsight.core;
 
-import org.watchinsight.core.module.AbstractModuleDefine;
+import org.watchinsight.core.module.ModuleDefine;
 
 /**
  * @author Created by gerry
  * @date 2023-03-10-22:58
  */
-public class CoreModule extends AbstractModuleDefine {
+public class CoreModule extends ModuleDefine {
     
     public static final String CORE = "core";
     

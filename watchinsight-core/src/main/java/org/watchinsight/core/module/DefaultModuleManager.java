@@ -68,8 +68,7 @@ public class DefaultModuleManager implements ModuleManager {
         stop();
     }
     
-    @Override
-    public void start() {
+    private void start() {
         for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
             for (ProviderDefine provider : providerDefine) {
                 provider.start();
@@ -77,17 +76,20 @@ public class DefaultModuleManager implements ModuleManager {
         }
     }
     
-    @Override
-    public void after() {
+    private void after() {
         for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
             for (ProviderDefine provider : providerDefine) {
-                provider.start();
+                provider.after();
             }
         }
     }
     
-    @Override
     public void stop() {
+        for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
+            for (ProviderDefine provider : providerDefine) {
+                provider.stop();
+            }
+        }
     }
     
     @Override
