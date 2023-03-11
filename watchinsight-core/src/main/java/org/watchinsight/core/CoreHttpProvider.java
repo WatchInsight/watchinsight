@@ -89,7 +89,6 @@ public class CoreHttpProvider extends ProviderDefine {
             });
         this.channel = b.bind(providerConfig.getPort()).channel();
         log.info("Netty http server listening on port " + providerConfig.getPort());
-        System.out.println("http provider started.");
     }
     
     @Override
