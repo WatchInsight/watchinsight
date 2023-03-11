@@ -18,6 +18,9 @@
 
 package org.watchinsight.core.module;
 
+import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -34,6 +37,8 @@ import org.watchinsight.core.provider.ProviderDefine;
 public class DefaultModuleManager implements ModuleManager {
     
     private ApplicationConfiguration configuration;
+    
+    private Map<ModuleDefine, List<ProviderDefine>> moduleDefines = Maps.newConcurrentMap();
     
     public DefaultModuleManager(ApplicationConfiguration configuration) {
         this.configuration = configuration;
@@ -52,19 +57,33 @@ public class DefaultModuleManager implements ModuleManager {
             final ModuleConfiguration moduleConfiguration = configuration.getModuleConfiguration(module);
             final ServiceLoader<ProviderDefine> providerDefines = ServiceLoader.load(ProviderDefine.class);
             //prepare
-            define.prepare(this, moduleConfiguration, providerDefines);
+            final List<ProviderDefine> providers = define.prepare(moduleConfiguration, providerDefines);
+            this.moduleDefines.put(define, providers);
         }
         //start
+        start();
         //after
+        after();
         //stop
+        stop();
     }
     
     @Override
     public void start() {
+        for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
+            for (ProviderDefine provider : providerDefine) {
+                provider.start();
+            }
+        }
     }
     
     @Override
     public void after() {
+        for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
+            for (ProviderDefine provider : providerDefine) {
+                provider.start();
+            }
+        }
     }
     
     @Override

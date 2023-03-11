@@ -43,4 +43,16 @@ public class CoreKafkaProvider extends AbstractProviderDefine {
     public void prepare() {
     }
     
+    @Override
+    public void start() {
+    }
+    
+    @Override
+    public void after() {
+    }
+    
+    @Override
+    public void stop() {
+    }
+    
 }

@@ -19,7 +19,9 @@
 package org.watchinsight.core.module;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +39,9 @@ import org.watchinsight.core.provider.ProviderDefine;
 public abstract class AbstractModuleDefine implements ModuleDefine {
     
     @Override
-    public void prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration,
+    public List<ProviderDefine> prepare(ModuleConfiguration moduleConfiguration,
         ServiceLoader<ProviderDefine> providerDefines) {
+        final List<ProviderDefine> providers = new ArrayList<>();
         for (ProviderDefine providerDefine : providerDefines) {
             final String provider = providerDefine.name();
             if (!moduleConfiguration.has(provider)) {
@@ -51,11 +54,13 @@ public abstract class AbstractModuleDefine implements ModuleDefine {
             try {
                 //Invoke prepare
                 prepare(providerDefine, providerConfiguration.getProperties(), config);
+                providers.add(providerDefine);
             } catch (IllegalAccessException e) {
                 throw new ProviderConfigException(
                     "Provider [" + provider + "] config transport to config bean failure.", e);
             }
         }
+        return providers;
     }
     
     private void prepare(ProviderDefine providerDefine, Properties properties, ProviderConfig config)

@@ -28,7 +28,7 @@ core:
 
 receiver:
   ##data format support otlp&meter
-  choices: [ otlp,meter ]
+  choices: [ otlp, meter ]
   otlp:
     metrics: dddd
     trace: dd

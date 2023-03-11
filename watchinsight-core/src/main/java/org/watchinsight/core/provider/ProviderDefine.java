@@ -43,4 +43,20 @@ public interface ProviderDefine {
      * Provider prepare
      */
     void prepare();
+    
+    /**
+     * Provider start
+     */
+    void start();
+    
+    /**
+     * Provider after
+     */
+    void after();
+    
+    /**
+     * Provider stop
+     */
+    void stop();
+    
 }

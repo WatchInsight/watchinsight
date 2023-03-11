@@ -18,6 +18,7 @@
 
 package org.watchinsight.core.module;
 
+import java.util.List;
 import java.util.ServiceLoader;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
 import org.watchinsight.core.provider.ProviderDefine;
@@ -36,9 +37,8 @@ public interface ModuleDefine {
     
     /**
      *  prepare
-     * @param manager
      * @param moduleConfiguration
      * @param providerDefines
      */
-    void prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration, ServiceLoader<ProviderDefine> providerDefines);
+    List<ProviderDefine> prepare(ModuleConfiguration moduleConfiguration, ServiceLoader<ProviderDefine> providerDefines);
 }
