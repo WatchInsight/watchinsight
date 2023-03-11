@@ -18,6 +18,18 @@
 
 package org.watchinsight.core;
 
+import io.grpc.netty.shaded.io.netty.bootstrap.ServerBootstrap;
+import io.grpc.netty.shaded.io.netty.channel.Channel;
+import io.grpc.netty.shaded.io.netty.channel.ChannelInitializer;
+import io.grpc.netty.shaded.io.netty.channel.ChannelOption;
+import io.grpc.netty.shaded.io.netty.channel.EventLoopGroup;
+import io.grpc.netty.shaded.io.netty.channel.nio.NioEventLoopGroup;
+import io.grpc.netty.shaded.io.netty.channel.socket.SocketChannel;
+import io.grpc.netty.shaded.io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpObjectAggregator;
+import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpServerCodec;
+import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpServerExpectContinueHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.HttpProviderConfig;
 import org.watchinsight.core.provider.ProviderDefine;
 
@@ -25,11 +37,22 @@ import org.watchinsight.core.provider.ProviderDefine;
  * @author Created by gerry
  * @date 2023-03-10-23:22
  */
+@Slf4j
 public class CoreHttpProvider extends ProviderDefine {
     
     public static final String HTTP = "http";
     
     private HttpProviderConfig providerConfig;
+    
+    private Channel channel;
+    
+    private EventLoopGroup bossGroup;
+    
+    private EventLoopGroup workerGroup;
+    
+    public CoreHttpProvider() {
+        this.providerConfig = new HttpProviderConfig();
+    }
     
     @Override
     public String name() {
@@ -38,24 +61,48 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public HttpProviderConfig createConfig() {
-        this.providerConfig = new HttpProviderConfig();
         return this.providerConfig;
     }
     
     @Override
     public void prepare() {
+        System.out.println("http provider prepare.");
     }
     
     @Override
     public void start() {
+        bossGroup = new NioEventLoopGroup();
+        workerGroup = new NioEventLoopGroup(100);
+        ServerBootstrap b = new ServerBootstrap().option(ChannelOption.SO_BACKLOG, 1024)
+            .childOption(ChannelOption.TCP_NODELAY, true)
+            .childOption(ChannelOption.SO_KEEPALIVE, true)
+            .group(bossGroup, workerGroup)
+            .channel(NioServerSocketChannel.class)
+            .childHandler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                protected void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline()
+                        .addLast(new HttpServerCodec())
+                        .addLast(new HttpObjectAggregator(Integer.MAX_VALUE))
+                        .addLast(new HttpServerExpectContinueHandler());
+                }
+            });
+        this.channel = b.bind(10000).channel();
+        log.info("Netty http server listening on port " + 10000);
+        System.out.println("http provider started.");
     }
     
     @Override
     public void after() {
+        System.out.println("http provider after.");
     }
     
     @Override
     public void stop() {
+        channel.close();
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
+        log.info("Netty HTTP Channel closed!");
     }
     
 }

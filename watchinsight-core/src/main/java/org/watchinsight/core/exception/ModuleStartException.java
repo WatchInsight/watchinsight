@@ -16,28 +16,26 @@
  *
  */
 
-package org.watchinsight.core.configuration;
+package org.watchinsight.core.exception;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-11-00:06
+ * @date 2023-03-09-00:46
  */
-@Data
-public class GrpcProviderConfig implements ProviderConfig {
-
-    private String host;
+public class ModuleStartException extends RuntimeException implements Supplier<ModuleStartException> {
     
-    private int port;
+    public ModuleStartException(final String s) {
+        super(s);
+    }
     
-    private int threadPoolSize;
+    public ModuleStartException(final String s, final Exception ex) {
+        super(s, ex);
+    }
     
-    private int threadPoolQueueSize;
-    
-    private int maxConcurrentCallsPerConnection = 4;
-    
-    private int maxInboundMessageSize = Integer.MAX_VALUE;
-    
+    @Override
+    public ModuleStartException get() {
+        return this;
+    }
 }

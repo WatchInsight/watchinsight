@@ -85,11 +85,13 @@ public class DefaultModuleManager implements ModuleManager {
     }
     
     public void stop() {
-        for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
-            for (ProviderDefine provider : providerDefine) {
-                provider.stop();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
+                for (ProviderDefine provider : providerDefine) {
+                    provider.stop();
+                }
             }
-        }
+        }));
     }
     
     @Override

@@ -83,7 +83,9 @@ public abstract class ModuleDefine {
                 field.setAccessible(true);
                 field.set(dest, src.get(propertyName));
             } catch (NoSuchFieldException e) {
-                log.warn(e.getMessage(), propertyName + " setting is not supported in [{}] provider", provider);
+                log.warn(
+                    e.getMessage() + " ,propertyName [" + propertyName + "] setting is not supported in [" + provider
+                        + "] provider");
             }
         }
     }

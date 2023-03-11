@@ -18,16 +18,35 @@
 
 package org.watchinsight.core;
 
+import io.grpc.Server;
+import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
+import io.grpc.netty.shaded.io.netty.util.concurrent.DefaultThreadFactory;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
+import org.watchinsight.core.configuration.GrpcProviderConfig;
+import org.watchinsight.core.exception.ModuleStartException;
+import org.watchinsight.core.exception.ModuleStopException;
 import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
  * @date 2023-03-10-23:22
  */
+@Slf4j
 public class CoreGprcProvider extends ProviderDefine {
     
     public static final String GRPC = "grpc";
+    
+    private GrpcProviderConfig config;
+    
+    private Server server;
+    
+    public CoreGprcProvider() {
+        this.config = new GrpcProviderConfig();
+    }
     
     @Override
     public String name() {
@@ -35,16 +54,29 @@ public class CoreGprcProvider extends ProviderDefine {
     }
     
     @Override
-    public <T extends ProviderConfig> T createConfig() {
-        return null;
+    public GrpcProviderConfig createConfig() {
+        return this.config;
     }
     
     @Override
     public void prepare() {
+        final Executor executor = new ThreadPoolExecutor(
+            config.getThreadPoolSize(), config.getThreadPoolSize(), 60, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(config.getThreadPoolQueueSize()),
+            new DefaultThreadFactory("GrpcServerPool"),
+            (r, e) -> log.error("Grpc server thread pool is full, reject all task."));
+        this.server = NettyServerBuilder.forPort(config.getPort())
+            .maxConcurrentCallsPerConnection(config.getMaxConcurrentCallsPerConnection())
+            .maxInboundMessageSize(config.getMaxInboundMessageSize()).executor(executor).build();
     }
     
     @Override
     public void start() {
+        try {
+            server.start();
+        } catch (Exception e) {
+            throw new ModuleStartException(e.getMessage(), e);
+        }
     }
     
     @Override
@@ -53,6 +85,11 @@ public class CoreGprcProvider extends ProviderDefine {
     
     @Override
     public void stop() {
+        try {
+            server.shutdown();
+        } catch (Exception e) {
+            throw new ModuleStopException(e.getMessage(), e);
+        }
     }
     
 }
