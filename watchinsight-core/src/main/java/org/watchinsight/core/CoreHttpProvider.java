@@ -98,7 +98,7 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public void stop() {
-        log.info("Netty HTTP Channel closed!");
+        log.info("Netty HTTP Channel stopping!");
         channel.close();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();

@@ -18,18 +18,13 @@
 
 package org.watchinsight.core;
 
-import io.grpc.Server;
-import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
-import io.grpc.netty.shaded.io.netty.util.concurrent.DefaultThreadFactory;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.GrpcProviderConfig;
 import org.watchinsight.core.exception.ModuleStartException;
 import org.watchinsight.core.exception.ModuleStopException;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.service.GrpcServerService;
+import org.watchinsight.core.service.IServerService;
 
 /**
  * @author Created by gerry
@@ -41,8 +36,6 @@ public class CoreGprcProvider extends ProviderDefine {
     public static final String GRPC = "grpc";
     
     private GrpcProviderConfig config;
-    
-    private Server server;
     
     public CoreGprcProvider() {
         this.config = new GrpcProviderConfig();
@@ -60,21 +53,13 @@ public class CoreGprcProvider extends ProviderDefine {
     
     @Override
     public void prepare() {
-        final Executor executor = new ThreadPoolExecutor(
-            config.getThreadPoolSize(), config.getThreadPoolSize(), 60, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(config.getThreadPoolQueueSize()),
-            new DefaultThreadFactory("GrpcServerPool"),
-            (r, e) -> log.error("Grpc server thread pool is full, reject all task."));
-        this.server = NettyServerBuilder.forPort(config.getPort())
-            .maxConcurrentCallsPerConnection(config.getMaxConcurrentCallsPerConnection())
-            .maxInboundMessageSize(config.getMaxInboundMessageSize()).executor(executor).build();
+        super.register(IServerService.class, new GrpcServerService(config));
     }
     
     @Override
     public void start() {
         try {
-            server.start();
-            log.info("Netty grpc server listening on port " + config.getPort());
+            super.getService(IServerService.class).start();
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage(), e);
         }
@@ -82,13 +67,14 @@ public class CoreGprcProvider extends ProviderDefine {
     
     @Override
     public void after() {
+        System.out.println("grpc after");
     }
     
     @Override
     public void stop() {
         try {
-            log.info("Netty grpc server closed!");
-            server.shutdown();
+            log.info("Netty grpc server stopping!");
+            super.getService(IServerService.class).shutdown();
         } catch (Exception e) {
             throw new ModuleStopException(e.getMessage(), e);
         }

@@ -20,8 +20,12 @@ package org.watchinsight.core.service;
 
 /**
  * @author Created by gerry
- * @date 2023-03-12-23:51
+ * @date 2023-03-12-23:47
  */
-public interface ServiceDefine {
-
+public interface IServerService extends ServiceDefine {
+    
+    void start() throws Exception;
+    
+    void shutdown() throws Exception;
+    
 }

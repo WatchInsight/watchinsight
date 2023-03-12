@@ -18,10 +18,29 @@
 
 package org.watchinsight.core.service;
 
+import org.watchinsight.core.exception.ServiceNotFoundException;
+
 /**
  * @author Created by gerry
- * @date 2023-03-12-23:51
+ * @date 2023-03-11-19:27
  */
-public interface ServiceDefine {
-
+public interface ServiceManager {
+    
+    /**
+     * register provider service
+     *
+     * @param serviceType class
+     * @param service     Service
+     * @throws ServiceNotFoundException exception
+     */
+    void register(Class<? extends ServiceDefine> serviceType, ServiceDefine service) throws ServiceNotFoundException;
+    
+    /**
+     * get provider service instance
+     *
+     * @param clazz source
+     * @param <T>   target
+     * @return T return
+     */
+    <T extends ServiceDefine> T getService(Class<T> clazz);
 }

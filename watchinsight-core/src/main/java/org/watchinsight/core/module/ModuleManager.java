@@ -19,7 +19,6 @@
 package org.watchinsight.core.module;
 
 import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
@@ -42,6 +41,6 @@ public interface ModuleManager {
      * @param provider
      * @return
      */
-    ServiceDefine find(String module, String provider);
+    ProviderDefine find(String module, String provider);
     
 }

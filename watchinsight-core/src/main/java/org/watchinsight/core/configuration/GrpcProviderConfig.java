@@ -32,6 +32,8 @@ public class GrpcProviderConfig implements ProviderConfig {
     
     private int port;
     
+    private int workThreads;
+    
     private int threadPoolSize;
     
     private int threadPoolQueueSize;

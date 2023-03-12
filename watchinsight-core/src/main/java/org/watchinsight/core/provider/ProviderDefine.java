@@ -24,13 +24,14 @@ import lombok.Getter;
 import org.watchinsight.core.exception.ServiceNotFoundException;
 import org.watchinsight.core.module.ModuleManager;
 import org.watchinsight.core.service.ServiceDefine;
+import org.watchinsight.core.service.ServiceManager;
 import org.watchinsight.core.utils.EmptyUtils;
 
 /**
  * @author Created by gerry
  * @date 2023-03-10-23:20
  */
-public abstract class ProviderDefine implements ServiceDefine {
+public abstract class ProviderDefine implements ServiceManager {
     
     private final Map<Class<? extends ServiceDefine>, ServiceDefine> services = new ConcurrentHashMap<>();
     
@@ -76,7 +77,7 @@ public abstract class ProviderDefine implements ServiceDefine {
      */
     public abstract void stop();
     
-    public ServiceDefine find(String module, String provider){
+    public ServiceManager find(String module, String provider){
         return moduleManager.find(module, provider);
     }
     

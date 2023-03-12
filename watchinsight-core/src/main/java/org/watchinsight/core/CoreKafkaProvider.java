@@ -56,7 +56,7 @@ public class CoreKafkaProvider extends ProviderDefine {
     
     @Override
     public void stop() {
-        System.out.println("kafka provider stop.");
+        System.out.println("kafka provider stopping.");
     }
     
 }

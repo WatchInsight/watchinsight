@@ -29,7 +29,6 @@ import org.watchinsight.core.configuration.ApplicationConfiguration;
 import org.watchinsight.core.configuration.ApplicationConfiguration.ModuleConfiguration;
 import org.watchinsight.core.exception.ProviderNotFoundException;
 import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
@@ -93,6 +92,7 @@ public class DefaultModuleManager implements ModuleManager {
             for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
                 for (ProviderDefine provider : providerDefine) {
                     provider.stop();
+                    log.info("Provider [{}] is stopped", provider.name());
                 }
             }
         }));
@@ -104,7 +104,7 @@ public class DefaultModuleManager implements ModuleManager {
     }
     
     @Override
-    public ServiceDefine find(String module, String provider) {
+    public ProviderDefine find(String module, String provider) {
         for (ModuleDefine moduleDefine : moduleDefines.keySet()) {
             if (!moduleDefine.module().equals(module)) {
                 continue;
