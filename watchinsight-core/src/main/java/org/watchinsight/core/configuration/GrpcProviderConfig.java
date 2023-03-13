@@ -34,12 +34,4 @@ public class GrpcProviderConfig implements ProviderConfig {
     
     private int workThreads;
     
-    private int threadPoolSize;
-    
-    private int threadPoolQueueSize;
-    
-    private int maxConcurrentCallsPerConnection = 4;
-    
-    private int maxInboundMessageSize = Integer.MAX_VALUE;
-    
 }

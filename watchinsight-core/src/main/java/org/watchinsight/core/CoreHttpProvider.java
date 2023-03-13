@@ -18,20 +18,13 @@
 
 package org.watchinsight.core;
 
-import io.grpc.netty.shaded.io.netty.bootstrap.ServerBootstrap;
-import io.grpc.netty.shaded.io.netty.channel.Channel;
-import io.grpc.netty.shaded.io.netty.channel.ChannelInitializer;
-import io.grpc.netty.shaded.io.netty.channel.ChannelOption;
-import io.grpc.netty.shaded.io.netty.channel.EventLoopGroup;
-import io.grpc.netty.shaded.io.netty.channel.nio.NioEventLoopGroup;
-import io.grpc.netty.shaded.io.netty.channel.socket.SocketChannel;
-import io.grpc.netty.shaded.io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpObjectAggregator;
-import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpServerCodec;
-import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpServerExpectContinueHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.HttpProviderConfig;
+import org.watchinsight.core.exception.ModuleStartException;
+import org.watchinsight.core.exception.ModuleStopException;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.service.HttpServerService;
+import org.watchinsight.core.service.IServerService;
 
 /**
  * @author Created by gerry
@@ -42,16 +35,10 @@ public class CoreHttpProvider extends ProviderDefine {
     
     public static final String HTTP = "http";
     
-    private HttpProviderConfig providerConfig;
-    
-    private Channel channel;
-    
-    private EventLoopGroup bossGroup;
-    
-    private EventLoopGroup workerGroup;
+    private HttpProviderConfig config;
     
     public CoreHttpProvider() {
-        this.providerConfig = new HttpProviderConfig();
+        this.config = new HttpProviderConfig();
     }
     
     @Override
@@ -61,34 +48,22 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public HttpProviderConfig createConfig() {
-        return this.providerConfig;
+        return this.config;
     }
     
     @Override
     public void prepare() {
-        System.out.println("http provider prepare.");
+        super.register(IServerService.class, new HttpServerService(config));
     }
     
     @Override
     public void start() {
-        bossGroup = new NioEventLoopGroup(providerConfig.getWorkThreads());
-        workerGroup = new NioEventLoopGroup();
-        ServerBootstrap b = new ServerBootstrap().option(ChannelOption.SO_BACKLOG, 1024)
-            .childOption(ChannelOption.TCP_NODELAY, true)
-            .childOption(ChannelOption.SO_KEEPALIVE, true)
-            .group(bossGroup, workerGroup)
-            .channel(NioServerSocketChannel.class)
-            .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline()
-                        .addLast(new HttpServerCodec())
-                        .addLast(new HttpObjectAggregator(Integer.MAX_VALUE))
-                        .addLast(new HttpServerExpectContinueHandler());
-                }
-            });
-        this.channel = b.bind(providerConfig.getPort()).channel();
-        log.info("Netty http server listening on port " + providerConfig.getPort());
+        try {
+            super.getService(IServerService.class).start();
+            log.info("Netty http server listening on port " + config.getPort());
+        } catch (Exception e) {
+            throw new ModuleStartException(e.getMessage(), e);
+        }
     }
     
     @Override
@@ -98,10 +73,12 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public void stop() {
-        log.info("Netty HTTP Channel stopping!");
-        channel.close();
-        bossGroup.shutdownGracefully();
-        workerGroup.shutdownGracefully();
+        try {
+            log.info("Netty HTTP Channel stopping!");
+            super.getService(IServerService.class).shutdown();
+        } catch (Exception e) {
+            throw new ModuleStopException(e.getMessage(), e);
+        }
     }
     
 }
