@@ -70,7 +70,6 @@ public class HttpServerService implements IServerService {
                 }
             });
         this.channel = b.bind(config.getPort()).channel();
-        log.info("Netty http server listening on port " + config.getPort());
     }
     
     @Override

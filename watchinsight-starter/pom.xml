@@ -38,5 +38,13 @@
       <artifactId>watchinsight-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <!-- Receiver Module-->
+    <dependency>
+      <groupId>org.watchinsight</groupId>
+      <artifactId>receiver-otlp</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
   </dependencies>
 </project>

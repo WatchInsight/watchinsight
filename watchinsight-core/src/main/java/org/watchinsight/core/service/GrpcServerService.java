@@ -21,6 +21,7 @@ package org.watchinsight.core.service;
 import io.grpc.Server;
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import io.grpc.netty.shaded.io.netty.channel.nio.NioEventLoopGroup;
+import io.grpc.netty.shaded.io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.GrpcProviderConfig;
 
@@ -43,9 +44,9 @@ public class GrpcServerService implements IServerService {
     public void start() throws Exception {
         this.server = NettyServerBuilder.forPort(config.getPort())
             .bossEventLoopGroup(new NioEventLoopGroup(config.getWorkThreads()))
-            .workerEventLoopGroup(new NioEventLoopGroup()).build();
+            .workerEventLoopGroup(new NioEventLoopGroup())
+            .channelType(NioServerSocketChannel.class).build();
         this.server.start();
-        log.info("Netty grpc server listening on port " + config.getPort());
     }
     
     @Override

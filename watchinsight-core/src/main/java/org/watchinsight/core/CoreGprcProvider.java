@@ -60,6 +60,7 @@ public class CoreGprcProvider extends ProviderDefine {
     public void start() {
         try {
             super.getService(IServerService.class).start();
+            log.info("Netty grpc server listening on port " + config.getPort());
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage(), e);
         }

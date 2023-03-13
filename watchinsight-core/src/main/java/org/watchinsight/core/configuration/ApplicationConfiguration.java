@@ -56,7 +56,7 @@ public class ApplicationConfiguration {
         if (modules.containsKey(module)) {
             throw new ConfigurationException("Add module [" + module + "] duplicate, please check yml file.");
         }
-        final ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
+        final ModuleConfiguration moduleConfiguration = new ModuleConfiguration(module);
         for (ProviderConfiguration provider : providers) {
             moduleConfiguration.addProvider(provider);
         }
@@ -69,6 +69,13 @@ public class ApplicationConfiguration {
      * The configuration about a module.
      */
     public static class ModuleConfiguration {
+        
+        @Getter
+        private String name;
+        
+        public ModuleConfiguration(String name) {
+            this.name = name;
+        }
         
         /**
          * The a module for n providers

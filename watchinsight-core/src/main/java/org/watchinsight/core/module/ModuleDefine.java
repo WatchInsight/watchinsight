@@ -46,7 +46,6 @@ public abstract class ModuleDefine {
         for (ProviderDefine providerDefine : providerDefines) {
             final String provider = providerDefine.name();
             if (!moduleConfiguration.has(provider)) {
-                log.warn("[{}] provider is undefined, ignore.", provider);
                 continue;
             }
             //Init config
