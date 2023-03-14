@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import org.watchinsight.core.configuration.ApplicationConfigLoader;
 import org.watchinsight.core.configuration.ApplicationConfiguration;
 import org.watchinsight.core.configuration.ConfigLoader;
+import org.watchinsight.core.module.DefaultModuleManager;
 
 /**
  * @author Created by gerry
@@ -30,9 +31,13 @@ import org.watchinsight.core.configuration.ConfigLoader;
 public class WatchInsightStarter {
     
     public static void main(String[] args) throws FileNotFoundException {
+        //Build configuration loader
         final ConfigLoader<ApplicationConfiguration> configLoader = new ApplicationConfigLoader();
-        configLoader.load("application.yml");
-        //ModuleManager
+        //Load yml to application configuration
+        final ApplicationConfiguration configuration = configLoader.load("application.yml");
+        //Build module manager to init module & providers
+        final DefaultModuleManager manager = new DefaultModuleManager(configuration);
+        manager.init();
     }
     
 }

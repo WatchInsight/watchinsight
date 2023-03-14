@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,14 @@ public class ApplicationConfiguration {
     
     private Map<String, ModuleConfiguration> modules = Maps.newConcurrentMap();
     
+    public ModuleConfiguration getModuleConfiguration(final String module) {
+        return modules.get(module);
+    }
+    
+    public Set<String> modules() {
+        return modules.keySet();
+    }
+    
     public void addModule(final String module, final List<ProviderConfiguration> providers) {
         if (EmptyUtils.isEmpty(providers)) {
             log.warn("Load [{}] module define, but no providers, ignore.", module);
@@ -47,7 +56,7 @@ public class ApplicationConfiguration {
         if (modules.containsKey(module)) {
             throw new ConfigurationException("Add module [" + module + "] duplicate, please check yml file.");
         }
-        final ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
+        final ModuleConfiguration moduleConfiguration = new ModuleConfiguration(module);
         for (ProviderConfiguration provider : providers) {
             moduleConfiguration.addProvider(provider);
         }
@@ -60,6 +69,13 @@ public class ApplicationConfiguration {
      * The configuration about a module.
      */
     public static class ModuleConfiguration {
+        
+        @Getter
+        private String name;
+        
+        public ModuleConfiguration(String name) {
+            this.name = name;
+        }
         
         /**
          * The a module for n providers
@@ -79,6 +95,15 @@ public class ApplicationConfiguration {
                     "Add provider [" + configuration.getName() + "] duplicate, please check yml file.");
             }
             providers.add(configuration);
+        }
+        
+        public ProviderConfiguration find(String provider) {
+            return providers.stream().filter(_provider -> _provider.getName().equals(provider)).findFirst()
+                .orElse(null);
+        }
+        
+        public boolean has(String provider) {
+            return providers.stream().filter(_provider -> _provider.getName().equals(provider)).findAny().isPresent();
         }
     }
     

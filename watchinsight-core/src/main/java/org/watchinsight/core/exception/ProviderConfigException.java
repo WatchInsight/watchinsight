@@ -16,14 +16,26 @@
  *
  */
 
-package org.watchinsight.core.module;
+package org.watchinsight.core.exception;
+
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-08-22:35
+ * @date 2023-03-09-00:46
  */
-public enum Module {
+public class ProviderConfigException extends RuntimeException implements Supplier<ProviderConfigException> {
     
-    CORE,
+    public ProviderConfigException(final String s) {
+        super(s);
+    }
     
+    public ProviderConfigException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+    
+    @Override
+    public ProviderConfigException get() {
+        return this;
+    }
 }
