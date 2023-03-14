@@ -16,6 +16,6 @@
 #
 #
 
-org.watchinsight.core.CoreHttpProvider
 org.watchinsight.core.CoreGprcProvider
+org.watchinsight.core.CoreHttpProvider
 org.watchinsight.core.CoreKafkaProvider

@@ -40,7 +40,6 @@ receiver:
     trace: ccc
     logs: c
 
-
 storage:
   choices: [ clickhouse ]
   clickhouse:
