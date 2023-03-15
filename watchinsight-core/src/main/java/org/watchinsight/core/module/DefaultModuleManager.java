@@ -92,7 +92,6 @@ public class DefaultModuleManager implements ModuleManager {
             for (List<ProviderDefine> providerDefine : moduleDefines.values()) {
                 for (ProviderDefine provider : providerDefine) {
                     provider.stop();
-                    log.info("Provider [{}] is stopped", provider.name());
                 }
             }
         }));
