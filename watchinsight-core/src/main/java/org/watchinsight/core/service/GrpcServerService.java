@@ -42,6 +42,7 @@ public class GrpcServerService implements IServerService {
     
     @Override
     public void start() throws Exception {
+        //TODO Need support grpc auth interceptor & NettyServerBuilder.addService
         this.server = NettyServerBuilder.forPort(config.getPort())
             .bossEventLoopGroup(new NioEventLoopGroup(config.getWorkThreads()))
             .workerEventLoopGroup(new NioEventLoopGroup())

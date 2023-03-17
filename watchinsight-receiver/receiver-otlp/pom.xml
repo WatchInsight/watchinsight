@@ -31,8 +31,14 @@
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+    <opentelemetry-proto.version>1.7.1-alpha</opentelemetry-proto.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-proto</artifactId>
+      <version>${opentelemetry-proto.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.watchinsight</groupId>
       <artifactId>watchinsight-core</artifactId>
