@@ -34,4 +34,6 @@ public class GrpcProviderConfig implements ProviderConfig {
     
     private int workThreads;
     
+    private String token;
+    
 }

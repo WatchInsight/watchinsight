@@ -18,7 +18,13 @@
 
 package org.watchinsight.core.service;
 
+import io.grpc.Metadata;
 import io.grpc.Server;
+import io.grpc.ServerCall;
+import io.grpc.ServerCall.Listener;
+import io.grpc.ServerCallHandler;
+import io.grpc.ServerInterceptor;
+import io.grpc.Status;
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import io.grpc.netty.shaded.io.netty.channel.nio.NioEventLoopGroup;
 import io.grpc.netty.shaded.io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -30,7 +36,7 @@ import org.watchinsight.core.configuration.GrpcProviderConfig;
  * @date 2023-03-12-23:49
  */
 @Slf4j
-public class GrpcServerService implements IServerService {
+public class GrpcServerService implements IServerService, ServerInterceptor {
     
     private GrpcProviderConfig config;
     
@@ -40,12 +46,16 @@ public class GrpcServerService implements IServerService {
         this.config = config;
     }
     
+    private static final Metadata.Key<String> AUTH_HEADER_NAME = Metadata.Key
+        .of("Authentication", Metadata.ASCII_STRING_MARSHALLER);
+    
     @Override
     public void start() throws Exception {
-        //TODO Need support grpc auth interceptor & NettyServerBuilder.addService
+        //TODO Need support NettyServerBuilder.addService
         this.server = NettyServerBuilder.forPort(config.getPort())
             .bossEventLoopGroup(new NioEventLoopGroup(config.getWorkThreads()))
             .workerEventLoopGroup(new NioEventLoopGroup())
+            .intercept(this)
             .channelType(NioServerSocketChannel.class).build();
         this.server.start();
     }
@@ -56,4 +66,15 @@ public class GrpcServerService implements IServerService {
         server.awaitTermination();
     }
     
+    @Override
+    public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers,
+        ServerCallHandler<ReqT, RespT> next) {
+        final String auth = headers.get(AUTH_HEADER_NAME);
+        if (auth.equals(config.getToken())) {
+            return next.startCall(call, headers);
+        }
+        call.close(Status.PERMISSION_DENIED, new Metadata());
+        return new ServerCall.Listener<ReqT>() {
+        };
+    }
 }
