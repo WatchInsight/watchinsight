@@ -67,14 +67,14 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
     }
     
     @Override
-    public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers,
-        ServerCallHandler<ReqT, RespT> next) {
+    public <REQUEST, RESPONSE> Listener<REQUEST> interceptCall(ServerCall<REQUEST, RESPONSE> call, Metadata headers,
+        ServerCallHandler<REQUEST, RESPONSE> next) {
         final String auth = headers.get(AUTH_HEADER_NAME);
         if (auth.equals(config.getToken())) {
             return next.startCall(call, headers);
         }
         call.close(Status.PERMISSION_DENIED, new Metadata());
-        return new ServerCall.Listener<ReqT>() {
+        return new ServerCall.Listener<REQUEST>() {
         };
     }
 }
