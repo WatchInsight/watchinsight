@@ -16,24 +16,22 @@
  *
  */
 
-package org.watchinsight.core.configuration;
+package org.watchinsight.receiver.otlp.service;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceResponse;
+import io.opentelemetry.proto.collector.metrics.v1.MetricsServiceGrpc.MetricsServiceImplBase;
 
 /**
  * @author Created by gerry
- * @date 2023-03-11-00:06
+ * @date 2023-03-17-23:45
  */
-@Data
-public class GrpcProviderConfig implements ProviderConfig {
-
-    private String host;
+public class OpentelemetryMetricService extends MetricsServiceImplBase implements IOpentelemetryService {
     
-    private int port;
-    
-    private int workThreads;
-    
-    private String token;
-    
+    @Override
+    public void export(ExportMetricsServiceRequest request,
+        StreamObserver<ExportMetricsServiceResponse> responseObserver) {
+        super.export(request, responseObserver);
+    }
 }

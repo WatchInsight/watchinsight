@@ -41,22 +41,18 @@ public class CoreKafkaProvider extends ProviderDefine {
     
     @Override
     public void prepare() {
-        System.out.println("kafka provider prepare.");
     }
     
     @Override
     public void start() {
-        System.out.println("kafka provider started.");
     }
     
     @Override
     public void after() {
-        System.out.println("kafka provider after.");
     }
     
     @Override
     public void stop() {
-        System.out.println("kafka provider stopping.");
     }
     
 }

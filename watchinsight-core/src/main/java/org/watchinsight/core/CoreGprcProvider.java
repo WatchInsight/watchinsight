@@ -68,7 +68,6 @@ public class CoreGprcProvider extends ProviderDefine {
     
     @Override
     public void after() {
-        System.out.println("grpc after");
     }
     
     @Override

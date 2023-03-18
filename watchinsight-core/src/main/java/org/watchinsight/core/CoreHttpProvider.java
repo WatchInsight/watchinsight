@@ -68,7 +68,6 @@ public class CoreHttpProvider extends ProviderDefine {
     
     @Override
     public void after() {
-        System.out.println("http provider after.");
     }
     
     @Override

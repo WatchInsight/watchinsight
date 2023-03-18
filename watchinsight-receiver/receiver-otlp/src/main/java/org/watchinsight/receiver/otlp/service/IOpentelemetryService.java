@@ -16,24 +16,14 @@
  *
  */
 
-package org.watchinsight.core.configuration;
+package org.watchinsight.receiver.otlp.service;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-11-00:06
+ * @date 2023-03-17-23:44
  */
-@Data
-public class GrpcProviderConfig implements ProviderConfig {
+public interface IOpentelemetryService extends ServiceDefine {
 
-    private String host;
-    
-    private int port;
-    
-    private int workThreads;
-    
-    private String token;
-    
 }
