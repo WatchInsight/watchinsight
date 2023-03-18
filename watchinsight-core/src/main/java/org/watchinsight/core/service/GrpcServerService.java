@@ -42,6 +42,8 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
     
     private Server server;
     
+    private NettyServerBuilder nettyServerBuilder;
+    
     public GrpcServerService(GrpcProviderConfig config) {
         this.config = config;
     }
@@ -51,12 +53,13 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
     
     @Override
     public void start() throws Exception {
-        //TODO Need support NettyServerBuilder.addService
-        this.server = NettyServerBuilder.forPort(config.getPort())
+        //Need support NettyServerBuilder.addService
+        this.nettyServerBuilder = NettyServerBuilder.forPort(config.getPort())
             .bossEventLoopGroup(new NioEventLoopGroup(config.getWorkThreads()))
             .workerEventLoopGroup(new NioEventLoopGroup())
             .intercept(this)
-            .channelType(NioServerSocketChannel.class).build();
+            .channelType(NioServerSocketChannel.class);
+        this.server = nettyServerBuilder.build();
         this.server.start();
     }
     
