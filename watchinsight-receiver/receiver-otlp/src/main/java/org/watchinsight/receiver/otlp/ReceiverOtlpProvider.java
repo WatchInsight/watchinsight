@@ -18,7 +18,12 @@
 
 package org.watchinsight.receiver.otlp;
 
+import org.watchinsight.core.CoreGprcProvider;
+import org.watchinsight.core.CoreModule;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.service.IServerService;
+import org.watchinsight.receiver.otlp.service.OpenTelemetryTraceService;
+import org.watchinsight.receiver.otlp.service.OpentelemetryMetricService;
 
 /**
  * @author Created by gerry
@@ -46,14 +51,22 @@ public class ReceiverOtlpProvider extends ProviderDefine {
     
     @Override
     public void prepare() {
+        super.register(OpenTelemetryTraceService.class, new OpenTelemetryTraceService());
+        super.register(OpentelemetryMetricService.class, new OpentelemetryMetricService());
     }
     
     @Override
     public void start() {
+    
     }
     
     @Override
     public void after() {
+        final OpenTelemetryTraceService traceService = super.getService(OpenTelemetryTraceService.class);
+        final OpentelemetryMetricService metricService = super.getService(OpentelemetryMetricService.class);
+        final IServerService serverService = super.find(CoreModule.CORE, CoreGprcProvider.GRPC)
+            .getService(IServerService.class);
+        serverService.addService(metricService).addService(traceService);
     }
     
     @Override

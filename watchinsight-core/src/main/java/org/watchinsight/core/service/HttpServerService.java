@@ -18,6 +18,7 @@
 
 package org.watchinsight.core.service;
 
+import io.grpc.BindableService;
 import io.grpc.netty.shaded.io.netty.bootstrap.ServerBootstrap;
 import io.grpc.netty.shaded.io.netty.channel.Channel;
 import io.grpc.netty.shaded.io.netty.channel.ChannelInitializer;
@@ -77,6 +78,11 @@ public class HttpServerService implements IServerService {
         channel.close();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
+    }
+    
+    @Override
+    public IServerService addService(BindableService service) {
+        return this;
     }
     
 }

@@ -16,19 +16,24 @@
  *
  */
 
-package org.watchinsight.core.service;
+package org.watchinsight.receiver.otlp.service;
 
-import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
+import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
+import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.TraceServiceImplBase;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Created by gerry
- * @date 2023-03-12-23:47
+ * @date 2023-03-21-00:05
  */
-public interface IServerService extends ServiceDefine {
+@Slf4j
+public class OpenTelemetryTraceService extends TraceServiceImplBase implements IOpentelemetryService {
     
-    void start() throws Exception;
-    
-    void shutdown() throws Exception;
-    
-    IServerService addService(BindableService service);
+    @Override
+    public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
+        log.info(request.toString());
+        super.export(request, responseObserver);
+    }
 }

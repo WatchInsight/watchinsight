@@ -18,6 +18,7 @@
 
 package org.watchinsight.core.service;
 
+import io.grpc.BindableService;
 import io.grpc.Metadata;
 import io.grpc.Server;
 import io.grpc.ServerCall;
@@ -67,6 +68,12 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
     public void shutdown() throws Exception {
         server.shutdown();
         server.awaitTermination();
+    }
+    
+    @Override
+    public IServerService addService(BindableService service) {
+        this.nettyServerBuilder.addService(service);
+        return this;
     }
     
     @Override

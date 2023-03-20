@@ -29,7 +29,7 @@ import org.watchinsight.example.grpc.IGprcExampleService;
  */
 public class ExampleProvider extends ProviderDefine {
     
-    public static final String DEFAULT = "default";
+    public static final String GRPC_CLIENT = "grpc-client";
     
     private ExampleConfig config;
     
@@ -41,7 +41,7 @@ public class ExampleProvider extends ProviderDefine {
     
     @Override
     public String name() {
-        return DEFAULT;
+        return GRPC_CLIENT;
     }
     
     @Override
