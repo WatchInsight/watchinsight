@@ -75,6 +75,8 @@ public abstract class ProviderDefine implements ServiceManager {
      */
     public abstract void stop();
     
+    public abstract String module();
+    
     public ServiceManager find(String module, String provider) {
         return moduleManager.find(module, provider);
     }

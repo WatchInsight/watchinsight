@@ -29,7 +29,7 @@ import org.watchinsight.example.grpc.IGprcExampleService;
  */
 public class ExampleProvider extends ProviderDefine {
     
-    public static final String GRPC_CLIENT = "grpc-client";
+    public static final String GRPC = "grpc";
     
     private ExampleConfig config;
     
@@ -41,7 +41,7 @@ public class ExampleProvider extends ProviderDefine {
     
     @Override
     public String name() {
-        return GRPC_CLIENT;
+        return GRPC;
     }
     
     @Override
@@ -68,5 +68,10 @@ public class ExampleProvider extends ProviderDefine {
     @Override
     public void stop() {
         super.getService(IGprcExampleService.class).stop();
+    }
+    
+    @Override
+    public String module() {
+        return ExampleModule.EXAMPLE;
     }
 }

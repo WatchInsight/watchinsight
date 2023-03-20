@@ -72,10 +72,11 @@ public class ApplicationConfiguration {
         
         @Getter
         private String name;
-    
+        
         /**
          * The a module for n providers
          */
+        @Getter
         private List<ProviderConfiguration> providers = Lists.newArrayList();
         
         public ModuleConfiguration(String name) {

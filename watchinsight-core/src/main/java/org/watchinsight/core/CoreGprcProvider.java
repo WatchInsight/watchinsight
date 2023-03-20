@@ -80,4 +80,9 @@ public class CoreGprcProvider extends ProviderDefine {
         }
     }
     
+    @Override
+    public String module() {
+        return CoreModule.CORE;
+    }
+    
 }

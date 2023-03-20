@@ -29,8 +29,8 @@ core:
     url: 3
 
 example:
-  choices: [ grpc-client ]
-  grpc-client:
+  choices: [ grpc ]
+  grpc:
     grpcHost: '127.0.0.1'
     grpcPort: 19090
 

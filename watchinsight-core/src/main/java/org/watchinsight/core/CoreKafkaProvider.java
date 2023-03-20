@@ -55,4 +55,9 @@ public class CoreKafkaProvider extends ProviderDefine {
     public void stop() {
     }
     
+    @Override
+    public String module() {
+        return CoreModule.CORE;
+    }
+    
 }

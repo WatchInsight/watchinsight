@@ -21,6 +21,7 @@ package org.watchinsight.receiver.otlp;
 import org.watchinsight.core.CoreGprcProvider;
 import org.watchinsight.core.CoreModule;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.receiver.ReceiverModule;
 import org.watchinsight.core.service.IServerService;
 import org.watchinsight.receiver.otlp.service.OpenTelemetryTraceService;
 import org.watchinsight.receiver.otlp.service.OpentelemetryMetricService;
@@ -71,5 +72,10 @@ public class ReceiverOtlpProvider extends ProviderDefine {
     
     @Override
     public void stop() {
+    }
+    
+    @Override
+    public String module() {
+        return ReceiverModule.RECEIVER;
     }
 }

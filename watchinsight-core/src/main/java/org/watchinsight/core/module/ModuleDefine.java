@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ import org.watchinsight.core.configuration.ApplicationConfiguration.ProviderConf
 import org.watchinsight.core.exception.ProviderConfigException;
 import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.core.utils.EmptyUtils;
 
 /**
  * @author Created by gerry
@@ -43,18 +45,16 @@ public abstract class ModuleDefine {
     public List<ProviderDefine> prepare(ModuleManager manager, ModuleConfiguration moduleConfiguration,
         ServiceLoader<ProviderDefine> providerDefines) {
         final List<ProviderDefine> providers = new ArrayList<>();
-        for (ProviderDefine providerDefine : providerDefines) {
-            final String provider = providerDefine.name();
-            if (!moduleConfiguration.has(provider)) {
+        for (ProviderConfiguration provider : moduleConfiguration.getProviders()) {
+            final ProviderDefine providerDefine = getProviderDefine(moduleConfiguration.getName(), provider.getName(), providerDefines);
+            if (Objects.isNull(providerDefine)) {
                 continue;
             }
             //Init config
             final ProviderConfig config = providerDefine.createConfig();
-            //Find module binding providers
-            final ProviderConfiguration providerConfiguration = moduleConfiguration.find(provider);
             try {
                 //Invoke prepare
-                prepare(providerDefine, providerConfiguration.getProperties(), config);
+                prepare(providerDefine, provider.getProperties(), config);
                 providerDefine.addModuleManager(manager);
                 providers.add(providerDefine);
             } catch (IllegalAccessException e) {
@@ -63,6 +63,19 @@ public abstract class ModuleDefine {
             }
         }
         return providers;
+    }
+    
+    private ProviderDefine getProviderDefine(final String module, final String provider,
+        final ServiceLoader<ProviderDefine> providerDefines) {
+        if (EmptyUtils.isEmpty(provider)) {
+            return null;
+        }
+        for (ProviderDefine providerDefine : providerDefines) {
+            if (module.equals(providerDefine.module()) && provider.equals(providerDefine.name())) {
+                return providerDefine;
+            }
+        }
+        return null;
     }
     
     private void prepare(ProviderDefine providerDefine, Properties properties, ProviderConfig config)

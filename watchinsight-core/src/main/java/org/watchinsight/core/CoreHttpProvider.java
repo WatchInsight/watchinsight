@@ -80,4 +80,9 @@ public class CoreHttpProvider extends ProviderDefine {
         }
     }
     
+    @Override
+    public String module() {
+        return CoreModule.CORE;
+    }
+    
 }
