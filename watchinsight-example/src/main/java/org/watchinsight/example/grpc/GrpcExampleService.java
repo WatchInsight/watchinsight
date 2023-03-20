@@ -42,9 +42,12 @@ public class GrpcExampleService implements IGprcExampleService {
     
     private ManagedChannel channel;
     
+    private String host;
+    
     private int port;
     
-    public GrpcExampleService(int port) {
+    public GrpcExampleService(String host, int port) {
+        this.host = host;
         this.port = port;
     }
     
@@ -78,7 +81,7 @@ public class GrpcExampleService implements IGprcExampleService {
     
     @Override
     public void newChannel() {
-        this.channel = ManagedChannelBuilder.forAddress("localhost", port).usePlaintext().build();
+        this.channel = ManagedChannelBuilder.forTarget(host + ":" + port).usePlaintext().build();
     }
     
     @Override
@@ -88,6 +91,11 @@ public class GrpcExampleService implements IGprcExampleService {
             .addResourceSpans(ResourceSpans.newBuilder()
                 .addInstrumentationLibrarySpans(InstrumentationLibrarySpans.newBuilder().addSpans(span))).build();
         stub.export(request);
+    }
+    
+    @Override
+    public void stop() {
+        channel.shutdown();
     }
     
 }

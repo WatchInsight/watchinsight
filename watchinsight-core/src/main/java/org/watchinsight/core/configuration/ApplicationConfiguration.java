@@ -72,15 +72,15 @@ public class ApplicationConfiguration {
         
         @Getter
         private String name;
-        
-        public ModuleConfiguration(String name) {
-            this.name = name;
-        }
-        
+    
         /**
          * The a module for n providers
          */
         private List<ProviderConfiguration> providers = Lists.newArrayList();
+        
+        public ModuleConfiguration(String name) {
+            this.name = name;
+        }
         
         public void addProvider(ProviderConfiguration configuration) {
             if (Objects.isNull(configuration)) {

@@ -21,13 +21,18 @@ core:
   http:
     url: 1
   grpc:
-    host: 0.0.0.0
+    host: '0.0.0.0'
     port: 19090
-    token: 123456
+    token: '123456'
     workThreads: 100
   kafka:
     url: 3
 
+example:
+  choices: [ default ]
+  default:
+    grpcHost: '127.0.0.1'
+    grpcPort: 19090
 
 receiver:
   ##data format support otlp&meter

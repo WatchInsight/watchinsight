@@ -18,18 +18,19 @@
 
 package org.watchinsight.example;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.core.module.ModuleDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-19-23:20
+ * @date 2023-03-10-22:58
  */
-@Data
-public class ExampleConfig implements ProviderConfig {
-
-    private String grpcHost;
+public class ExampleModule extends ModuleDefine {
     
-    private int grpcPort;
+    public static final String EXAMPLE = "example";
+    
+    @Override
+    public String module() {
+        return EXAMPLE;
+    }
     
 }

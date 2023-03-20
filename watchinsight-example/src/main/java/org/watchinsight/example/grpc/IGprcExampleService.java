@@ -32,4 +32,6 @@ public interface IGprcExampleService extends ServiceDefine {
     void newChannel();
     
     void export(Span span);
+    
+    void stop();
 }

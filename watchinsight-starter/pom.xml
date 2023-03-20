@@ -46,6 +46,12 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- Example Module-->
+    <dependency>
+      <groupId>org.watchinsight</groupId>
+      <artifactId>watchinsight-example</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>

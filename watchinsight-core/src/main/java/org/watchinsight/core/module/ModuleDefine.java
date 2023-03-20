@@ -50,6 +50,7 @@ public abstract class ModuleDefine {
             }
             //Init config
             final ProviderConfig config = providerDefine.createConfig();
+            //Find module binding providers
             final ProviderConfiguration providerConfiguration = moduleConfiguration.find(provider);
             try {
                 //Invoke prepare
