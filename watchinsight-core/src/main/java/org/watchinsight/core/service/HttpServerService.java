@@ -48,15 +48,17 @@ public class HttpServerService implements IServerService {
     
     private EventLoopGroup workerGroup;
     
+    private ServerBootstrap bootstrap;
+    
     public HttpServerService(HttpProviderConfig config) {
         this.config = config;
     }
     
     @Override
-    public void start() throws Exception {
+    public IServerService init() {
         bossGroup = new NioEventLoopGroup(config.getWorkThreads());
         workerGroup = new NioEventLoopGroup();
-        ServerBootstrap b = new ServerBootstrap().option(ChannelOption.SO_BACKLOG, 1024)
+        bootstrap = new ServerBootstrap().option(ChannelOption.SO_BACKLOG, 1024)
             .childOption(ChannelOption.TCP_NODELAY, true)
             .childOption(ChannelOption.SO_KEEPALIVE, true)
             .group(bossGroup, workerGroup)
@@ -70,7 +72,12 @@ public class HttpServerService implements IServerService {
                         .addLast(new HttpServerExpectContinueHandler());
                 }
             });
-        this.channel = b.bind(config.getPort()).channel();
+        return this;
+    }
+    
+    @Override
+    public void start() throws Exception {
+        this.channel = bootstrap.bind(config.getPort()).channel();
     }
     
     @Override

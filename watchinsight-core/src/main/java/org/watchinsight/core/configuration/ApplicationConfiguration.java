@@ -38,7 +38,7 @@ import org.watchinsight.core.utils.EmptyUtils;
 @Slf4j
 public class ApplicationConfiguration {
     
-    private Map<String, ModuleConfiguration> modules = Maps.newConcurrentMap();
+    private Map<String, ModuleConfiguration> modules = Maps.newLinkedHashMap();
     
     public ModuleConfiguration getModuleConfiguration(final String module) {
         return modules.get(module);

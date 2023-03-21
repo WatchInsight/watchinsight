@@ -58,16 +58,15 @@ public class ReceiverOtlpProvider extends ProviderDefine {
     
     @Override
     public void start() {
-    
+        final OpenTelemetryTraceService traceService = super.getService(OpenTelemetryTraceService.class);
+        final OpentelemetryMetricService metricService = super.getService(OpentelemetryMetricService.class);
+        super.find(CoreModule.CORE, CoreGprcProvider.GRPC).getService(IServerService.class)
+            .addService(metricService)
+            .addService(traceService);
     }
     
     @Override
     public void after() {
-        final OpenTelemetryTraceService traceService = super.getService(OpenTelemetryTraceService.class);
-        final OpentelemetryMetricService metricService = super.getService(OpentelemetryMetricService.class);
-        final IServerService serverService = super.find(CoreModule.CORE, CoreGprcProvider.GRPC)
-            .getService(IServerService.class);
-        serverService.addService(metricService).addService(traceService);
     }
     
     @Override

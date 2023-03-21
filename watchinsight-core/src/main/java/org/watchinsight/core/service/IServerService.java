@@ -26,6 +26,8 @@ import io.grpc.BindableService;
  */
 public interface IServerService extends ServiceDefine {
     
+    IServerService init();
+    
     void start() throws Exception;
     
     void shutdown() throws Exception;

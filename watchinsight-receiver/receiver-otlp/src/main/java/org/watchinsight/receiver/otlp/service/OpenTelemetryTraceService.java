@@ -34,6 +34,7 @@ public class OpenTelemetryTraceService extends TraceServiceImplBase implements I
     @Override
     public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
         log.info(request.toString());
-        super.export(request, responseObserver);
+        responseObserver.onNext(ExportTraceServiceResponse.newBuilder().build());
+        responseObserver.onCompleted();
     }
 }

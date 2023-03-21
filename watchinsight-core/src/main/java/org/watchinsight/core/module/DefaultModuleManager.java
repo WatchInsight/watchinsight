@@ -39,7 +39,7 @@ public class DefaultModuleManager implements ModuleManager {
     
     private ApplicationConfiguration configuration;
     
-    private Map<ModuleDefine, List<ProviderDefine>> moduleDefines = Maps.newConcurrentMap();
+    private Map<ModuleDefine, List<ProviderDefine>> moduleDefines = Maps.newLinkedHashMap();
     
     public DefaultModuleManager(ApplicationConfiguration configuration) {
         this.configuration = configuration;

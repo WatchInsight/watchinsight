@@ -31,6 +31,7 @@ import io.grpc.netty.shaded.io.netty.channel.nio.NioEventLoopGroup;
 import io.grpc.netty.shaded.io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.configuration.GrpcProviderConfig;
+import org.watchinsight.core.utils.EmptyUtils;
 
 /**
  * @author Created by gerry
@@ -53,13 +54,18 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
         .of("Authentication", Metadata.ASCII_STRING_MARSHALLER);
     
     @Override
-    public void start() throws Exception {
+    public IServerService init() {
         //Need support NettyServerBuilder.addService
         this.nettyServerBuilder = NettyServerBuilder.forPort(config.getPort())
             .bossEventLoopGroup(new NioEventLoopGroup(config.getWorkThreads()))
             .workerEventLoopGroup(new NioEventLoopGroup())
             .intercept(this)
             .channelType(NioServerSocketChannel.class);
+        return this;
+    }
+    
+    @Override
+    public void start() throws Exception {
         this.server = nettyServerBuilder.build();
         this.server.start();
     }
@@ -73,6 +79,7 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
     @Override
     public IServerService addService(BindableService service) {
         this.nettyServerBuilder.addService(service);
+        log.info("Add grpc server service is {}", service);
         return this;
     }
     
@@ -80,7 +87,7 @@ public class GrpcServerService implements IServerService, ServerInterceptor {
     public <REQUEST, RESPONSE> Listener<REQUEST> interceptCall(ServerCall<REQUEST, RESPONSE> call, Metadata headers,
         ServerCallHandler<REQUEST, RESPONSE> next) {
         final String auth = headers.get(AUTH_HEADER_NAME);
-        if (auth.equals(config.getToken())) {
+        if (EmptyUtils.isNotEmpty(auth) && auth.equals(config.getToken())) {
             return next.startCall(call, headers);
         }
         call.close(Status.PERMISSION_DENIED, new Metadata());

@@ -16,5 +16,4 @@
 #
 #
 
-org.watchinsight.core.CoreModule
-org.watchinsight.core.receiver.ReceiverModule
+org.watchinsight.example.ExampleModule
