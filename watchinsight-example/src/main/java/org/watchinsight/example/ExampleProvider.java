@@ -51,7 +51,8 @@ public class ExampleProvider extends ProviderDefine {
     
     @Override
     public void prepare() {
-        super.register(IGprcExampleService.class, new GrpcExampleService(config.getGrpcHost(), config.getGrpcPort()));
+        super.register(IGprcExampleService.class,
+            new GrpcExampleService(config.getGrpcHost(), config.getGrpcPort(), config.getToken()));
     }
     
     @Override

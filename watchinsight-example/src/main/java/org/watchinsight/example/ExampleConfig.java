@@ -32,4 +32,6 @@ public class ExampleConfig implements ProviderConfig {
     
     private int grpcPort;
     
+    private String token;
+    
 }

@@ -20,8 +20,15 @@ package org.watchinsight.example.grpc;
 
 import com.google.common.primitives.Longs;
 import com.google.protobuf.ByteString;
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.ClientCall;
+import io.grpc.ClientInterceptor;
+import io.grpc.ForwardingClientCall;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Metadata;
+import io.grpc.MethodDescriptor;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.TraceServiceBlockingStub;
@@ -46,9 +53,15 @@ public class GrpcExampleService implements IGprcExampleService {
     
     private int port;
     
-    public GrpcExampleService(String host, int port) {
+    private String token;
+    
+    private static final Metadata.Key<String> AUTH_HEADER_NAME = Metadata.Key
+        .of("Authentication", Metadata.ASCII_STRING_MARSHALLER);
+    
+    public GrpcExampleService(String host, int port, String token) {
         this.host = host;
         this.port = port;
+        this.token = token;
     }
     
     @Override
@@ -81,7 +94,21 @@ public class GrpcExampleService implements IGprcExampleService {
     
     @Override
     public void newChannel() {
-        this.channel = ManagedChannelBuilder.forTarget(host + ":" + port).usePlaintext().build();
+        this.channel = ManagedChannelBuilder.forTarget(host + ":" + port).usePlaintext().intercept(
+            new ClientInterceptor() {
+                @Override
+                public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method,
+                    CallOptions callOptions, Channel next) {
+                    return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(
+                        next.newCall(method, callOptions)) {
+                        @Override
+                        public void start(Listener<RespT> responseListener, Metadata headers) {
+                            headers.put(AUTH_HEADER_NAME, token);
+                            super.start(responseListener, headers);
+                        }
+                    };
+                }
+            }).build();
     }
     
     @Override
