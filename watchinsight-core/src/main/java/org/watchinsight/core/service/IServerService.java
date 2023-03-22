@@ -18,14 +18,19 @@
 
 package org.watchinsight.core.service;
 
+import io.grpc.BindableService;
+
 /**
  * @author Created by gerry
  * @date 2023-03-12-23:47
  */
 public interface IServerService extends ServiceDefine {
     
+    IServerService init();
+    
     void start() throws Exception;
     
     void shutdown() throws Exception;
     
+    IServerService addService(BindableService service);
 }

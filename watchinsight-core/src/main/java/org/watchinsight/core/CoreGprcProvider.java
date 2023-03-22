@@ -53,21 +53,22 @@ public class CoreGprcProvider extends ProviderDefine {
     
     @Override
     public void prepare() {
-        super.register(IServerService.class, new GrpcServerService(config));
+        super.register(IServerService.class, new GrpcServerService(config).init());
     }
     
     @Override
     public void start() {
+    
+    }
+    
+    @Override
+    public void after() {
         try {
             super.getService(IServerService.class).start();
             log.info("Netty grpc server listening on port " + config.getPort());
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage(), e);
         }
-    }
-    
-    @Override
-    public void after() {
     }
     
     @Override
@@ -78,6 +79,11 @@ public class CoreGprcProvider extends ProviderDefine {
         } catch (Exception e) {
             throw new ModuleStopException(e.getMessage(), e);
         }
+    }
+    
+    @Override
+    public String module() {
+        return CoreModule.CORE;
     }
     
 }

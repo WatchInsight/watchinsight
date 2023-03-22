@@ -16,48 +16,62 @@
  *
  */
 
-package org.watchinsight.core;
+package org.watchinsight.example;
 
+import io.opentelemetry.proto.trace.v1.Span;
 import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.example.grpc.GrpcExampleService;
+import org.watchinsight.example.grpc.IGprcExampleService;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-23:22
+ * @date 2023-03-19-23:17
  */
-public class CoreKafkaProvider extends ProviderDefine {
+public class ExampleProvider extends ProviderDefine {
     
-    public static final String KAFKA = "kafka";
+    public static final String GRPC = "grpc";
     
-    @Override
-    public String name() {
-        return KAFKA;
+    private ExampleConfig config;
+    
+    private Span span;
+    
+    public ExampleProvider() {
+        this.config = new ExampleConfig();
     }
     
     @Override
-    public <T extends ProviderConfig> T createConfig() {
-        return null;
+    public String name() {
+        return GRPC;
+    }
+    
+    @Override
+    public ExampleConfig createConfig() {
+        return this.config;
     }
     
     @Override
     public void prepare() {
+        super.register(IGprcExampleService.class, new GrpcExampleService(config.getGrpcHost(), config.getGrpcPort()));
     }
     
     @Override
     public void start() {
+        super.getService(IGprcExampleService.class).newChannel();
+        this.span = super.getService(IGprcExampleService.class).newSpans();
     }
     
     @Override
     public void after() {
+        super.getService(IGprcExampleService.class).export(span);
     }
     
     @Override
     public void stop() {
+        super.getService(IGprcExampleService.class).stop();
     }
     
     @Override
     public String module() {
-        return CoreModule.CORE;
+        return ExampleModule.EXAMPLE;
     }
-    
 }

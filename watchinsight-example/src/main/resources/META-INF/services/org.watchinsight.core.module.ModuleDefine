@@ -1,3 +1,4 @@
+#
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -12,42 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+#
 
-core:
-  choices: [ default, http, grpc, kafka ]
-  default:
-    core: 0
-  ##provider transports for http&grpc&kafka
-  http:
-    url: 1
-  grpc:
-    host: '0.0.0.0'
-    port: 19090
-    token: '123456'
-    workThreads: 100
-  kafka:
-    url: 3
-
-example:
-  choices: [ grpc ]
-  grpc:
-    grpcHost: '127.0.0.1'
-    grpcPort: 19090
-
-receiver:
-  ##data format support otlp&meter
-  choices: [ otlp, meter ]
-  otlp:
-    metrics: dddd
-    trace: dd
-    logs: ddd
-  meter:
-    metrics: cc
-    trace: ccc
-    logs: c
-
-storage:
-  choices: [ clickhouse ]
-  clickhouse:
-  elasticsearch:
-
+org.watchinsight.example.ExampleModule

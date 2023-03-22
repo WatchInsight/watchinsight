@@ -16,48 +16,25 @@
  *
  */
 
-package org.watchinsight.core;
+package org.watchinsight.receiver.otlp.service;
 
-import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.provider.ProviderConfig;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
+import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
+import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.TraceServiceImplBase;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-23:22
+ * @date 2023-03-21-00:05
  */
-public class CoreKafkaProvider extends ProviderDefine {
-    
-    public static final String KAFKA = "kafka";
-    
-    @Override
-    public String name() {
-        return KAFKA;
-    }
+@Slf4j
+public class OpenTelemetryTraceService extends TraceServiceImplBase implements IOpentelemetryService {
     
     @Override
-    public <T extends ProviderConfig> T createConfig() {
-        return null;
+    public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
+        log.info(request.toString());
+        responseObserver.onNext(ExportTraceServiceResponse.newBuilder().build());
+        responseObserver.onCompleted();
     }
-    
-    @Override
-    public void prepare() {
-    }
-    
-    @Override
-    public void start() {
-    }
-    
-    @Override
-    public void after() {
-    }
-    
-    @Override
-    public void stop() {
-    }
-    
-    @Override
-    public String module() {
-        return CoreModule.CORE;
-    }
-    
 }

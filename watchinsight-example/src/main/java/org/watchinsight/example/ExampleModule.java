@@ -16,48 +16,21 @@
  *
  */
 
-package org.watchinsight.core;
+package org.watchinsight.example;
 
-import org.watchinsight.core.provider.ProviderDefine;
-import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.core.module.ModuleDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-23:22
+ * @date 2023-03-10-22:58
  */
-public class CoreKafkaProvider extends ProviderDefine {
+public class ExampleModule extends ModuleDefine {
     
-    public static final String KAFKA = "kafka";
-    
-    @Override
-    public String name() {
-        return KAFKA;
-    }
-    
-    @Override
-    public <T extends ProviderConfig> T createConfig() {
-        return null;
-    }
-    
-    @Override
-    public void prepare() {
-    }
-    
-    @Override
-    public void start() {
-    }
-    
-    @Override
-    public void after() {
-    }
-    
-    @Override
-    public void stop() {
-    }
+    public static final String EXAMPLE = "example";
     
     @Override
     public String module() {
-        return CoreModule.CORE;
+        return EXAMPLE;
     }
     
 }

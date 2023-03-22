@@ -16,48 +16,20 @@
  *
  */
 
-package org.watchinsight.core;
+package org.watchinsight.example;
 
-import org.watchinsight.core.provider.ProviderDefine;
+import lombok.Data;
 import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
- * @date 2023-03-10-23:22
+ * @date 2023-03-19-23:20
  */
-public class CoreKafkaProvider extends ProviderDefine {
+@Data
+public class ExampleConfig implements ProviderConfig {
+
+    private String grpcHost;
     
-    public static final String KAFKA = "kafka";
-    
-    @Override
-    public String name() {
-        return KAFKA;
-    }
-    
-    @Override
-    public <T extends ProviderConfig> T createConfig() {
-        return null;
-    }
-    
-    @Override
-    public void prepare() {
-    }
-    
-    @Override
-    public void start() {
-    }
-    
-    @Override
-    public void after() {
-    }
-    
-    @Override
-    public void stop() {
-    }
-    
-    @Override
-    public String module() {
-        return CoreModule.CORE;
-    }
+    private int grpcPort;
     
 }

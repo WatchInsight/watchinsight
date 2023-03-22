@@ -38,7 +38,7 @@ import org.watchinsight.core.utils.EmptyUtils;
 @Slf4j
 public class ApplicationConfiguration {
     
-    private Map<String, ModuleConfiguration> modules = Maps.newConcurrentMap();
+    private Map<String, ModuleConfiguration> modules = Maps.newLinkedHashMap();
     
     public ModuleConfiguration getModuleConfiguration(final String module) {
         return modules.get(module);
@@ -73,14 +73,15 @@ public class ApplicationConfiguration {
         @Getter
         private String name;
         
-        public ModuleConfiguration(String name) {
-            this.name = name;
-        }
-        
         /**
          * The a module for n providers
          */
+        @Getter
         private List<ProviderConfiguration> providers = Lists.newArrayList();
+        
+        public ModuleConfiguration(String name) {
+            this.name = name;
+        }
         
         public void addProvider(ProviderConfiguration configuration) {
             if (Objects.isNull(configuration)) {
