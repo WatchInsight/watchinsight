@@ -30,6 +30,7 @@
     <module>watchinsight-starter</module>
     <module>watchinsight-storage</module>
     <module>watchinsight-receiver</module>
+    <module>watchinsight-storage/storage-clickhouse</module>
   </modules>
 
   <properties>
