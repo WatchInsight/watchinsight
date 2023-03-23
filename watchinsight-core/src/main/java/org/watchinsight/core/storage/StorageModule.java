@@ -16,22 +16,20 @@
  *
  */
 
-package org.watchinsight.receiver.oltp.test;
+package org.watchinsight.core.storage;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.core.module.ModuleDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-19-23:20
+ * @date 2023-03-23-23:52
  */
-@Data
-public class ExampleConfig implements ProviderConfig {
-
-    private String grpcHost;
+public class StorageModule extends ModuleDefine {
     
-    private int grpcPort;
+    public static final String STORAGE = "storage";
     
-    private String token;
-    
+    @Override
+    public String module() {
+        return STORAGE;
+    }
 }

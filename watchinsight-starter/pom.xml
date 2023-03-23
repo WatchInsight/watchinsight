@@ -46,10 +46,10 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!-- Example Module-->
+    <!-- Storage Module-->
     <dependency>
       <groupId>org.watchinsight</groupId>
-      <artifactId>watchinsight-example</artifactId>
+      <artifactId>storage-clickhouse</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

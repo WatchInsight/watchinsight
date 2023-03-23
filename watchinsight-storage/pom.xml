@@ -33,4 +33,7 @@
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
+  <modules>
+    <module>storage-clickhouse</module>
+  </modules>
 </project>

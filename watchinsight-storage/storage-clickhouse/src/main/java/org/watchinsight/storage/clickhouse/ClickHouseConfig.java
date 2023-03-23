@@ -18,11 +18,18 @@
 
 package org.watchinsight.storage.clickhouse;
 
+import lombok.Data;
 import org.watchinsight.core.provider.ProviderConfig;
 
 /**
- * 
  * @author Created by gerry
  * @date 2023-03-23-23:45
- */public class ClickHouseConfig implements ProviderConfig {
+ */
+@Data
+public class ClickHouseConfig implements ProviderConfig {
+    
+    private String url;
+    
+    private String database;
+    
 }

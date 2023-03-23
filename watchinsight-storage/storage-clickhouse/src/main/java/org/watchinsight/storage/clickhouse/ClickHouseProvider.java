@@ -18,8 +18,8 @@
 
 package org.watchinsight.storage.clickhouse;
 
-import org.watchinsight.core.provider.ProviderConfig;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.storage.StorageModule;
 
 /**
  * @author Created by gerry
@@ -29,14 +29,20 @@ public class ClickHouseProvider extends ProviderDefine {
     
     public static final String CLICKHOUSE = "clickhouse";
     
+    private ClickHouseConfig config;
+    
+    public ClickHouseProvider() {
+        this.config = new ClickHouseConfig();
+    }
+    
     @Override
     public String name() {
         return CLICKHOUSE;
     }
     
     @Override
-    public <T extends ProviderConfig> T createConfig() {
-        return null;
+    public ClickHouseConfig createConfig() {
+        return this.config;
     }
     
     @Override
@@ -57,6 +63,6 @@ public class ClickHouseProvider extends ProviderDefine {
     
     @Override
     public String module() {
-        return null;
+        return StorageModule.STORAGE;
     }
 }
