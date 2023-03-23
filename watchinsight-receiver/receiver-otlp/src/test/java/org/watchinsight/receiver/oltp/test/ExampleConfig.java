@@ -16,22 +16,22 @@
  *
  */
 
-package org.watchinsight.example.grpc;
+package org.watchinsight.receiver.oltp.test;
 
-import io.opentelemetry.proto.trace.v1.Span;
-import org.watchinsight.core.service.ServiceDefine;
+import lombok.Data;
+import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
- * @date 2023-03-19-23:46
+ * @date 2023-03-19-23:20
  */
-public interface IGprcExampleService extends ServiceDefine {
+@Data
+public class ExampleConfig implements ProviderConfig {
+
+    private String grpcHost;
     
-    Span newSpans();
+    private int grpcPort;
     
-    void newChannel();
+    private String token;
     
-    void export(Span span);
-    
-    void stop();
 }

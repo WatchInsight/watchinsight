@@ -16,7 +16,7 @@
  *
  */
 
-package org.watchinsight.example.grpc;
+package org.watchinsight.receiver.oltp.test;
 
 import com.google.common.primitives.Longs;
 import com.google.protobuf.ByteString;
@@ -29,6 +29,9 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.MethodDescriptor;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest;
+import io.opentelemetry.proto.collector.metrics.v1.MetricsServiceGrpc;
+import io.opentelemetry.proto.collector.metrics.v1.MetricsServiceGrpc.MetricsServiceBlockingStub;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.TraceServiceBlockingStub;
@@ -80,13 +83,15 @@ public class GrpcExampleService implements IGprcExampleService {
         spanBuilder.setEndTimeUnixNano(System.currentTimeMillis() * 1000);
         // Add attributes to the span
         spanBuilder.addAttributes(
-            KeyValue.newBuilder().setKey("example-attribute-key").setValue(AnyValue.newBuilder().build()).build());
+            KeyValue.newBuilder().setKey("example-attribute-key")
+                .setValue(AnyValue.newBuilder().setStringValue("example-attribute-value").build()).build());
         // Add events to the span
         spanBuilder.addEvents(Event.newBuilder()
             .setName("example-event")
             .setTimeUnixNano(System.currentTimeMillis() * 1000)
             .addAttributes(
-                KeyValue.newBuilder().setKey("example-event-attribute-key").setValue(AnyValue.newBuilder().build())
+                KeyValue.newBuilder().setKey("example-event-attribute-key")
+                    .setValue(AnyValue.newBuilder().setStringValue("example-event-attribute-value").build())
                     .build()));
         // Build and return the span
         return spanBuilder.build();
@@ -113,11 +118,14 @@ public class GrpcExampleService implements IGprcExampleService {
     
     @Override
     public void export(final Span span) {
-        final TraceServiceBlockingStub stub = TraceServiceGrpc.newBlockingStub(channel);
+        final MetricsServiceBlockingStub mstub = MetricsServiceGrpc.newBlockingStub(channel);
+        mstub.export(ExportMetricsServiceRequest.getDefaultInstance());
+        
+        final TraceServiceBlockingStub tstub = TraceServiceGrpc.newBlockingStub(channel);
         final ExportTraceServiceRequest request = ExportTraceServiceRequest.newBuilder()
             .addResourceSpans(ResourceSpans.newBuilder()
                 .addInstrumentationLibrarySpans(InstrumentationLibrarySpans.newBuilder().addSpans(span))).build();
-        stub.export(request);
+        tstub.export(request);
     }
     
     @Override

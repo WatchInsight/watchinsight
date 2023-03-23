@@ -30,7 +30,6 @@
     <module>watchinsight-starter</module>
     <module>watchinsight-storage</module>
     <module>watchinsight-receiver</module>
-    <module>watchinsight-example</module>
   </modules>
 
   <properties>
@@ -44,11 +43,8 @@
     <guava.version>31.1-jre</guava.version>
     <lombok.version>1.18.26</lombok.version>
     <slf4j2.version>2.20.0</slf4j2.version>
-    <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
-    <protobuf.version>3.22.2</protobuf.version>
-    <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
-    <protoc-gen-grpc-java.plugin.version>1.42.1</protoc-gen-grpc-java.plugin.version>
     <grpc.version>1.53.0</grpc.version>
+    <junit.version>4.13.2</junit.version>
   </properties>
 
   <dependencies>
@@ -72,6 +68,12 @@
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
