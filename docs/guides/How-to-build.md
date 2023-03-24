@@ -1,8 +1,7 @@
 # How to build project
 This document helps people compile and build projects in your Maven and set up your IDE.
-
 ### Build from GitHub
-1. Prepare git, JDK8 and maven3
+1. Prepare git, JDK11+ and maven3
 1. Clone project
     ```bash
     git clone https://github.com/WatchInsight/watchinsight.git
