@@ -69,13 +69,19 @@ List the required modules here
       ```
     + Step3: CMD
       ```shell
-      docker run -d -p 8123:8123 -p9000:9000 --name clickhouse-server --ulimit nofile=262144:262144 clickhouse/clickhouse-server
+      ## 8123 is Http Protocol Port
+      ## 9000 is Tcp Protocol Port
+      ## 9004 is Mysql Protocol Port
+      ## 9005 is Postgresql Protocol Port
+      ## 9100 is Grpc Protocol Port
+      docker run -d -p 8123:8123 -p9000:9000 -p9100:9100 --name clickhouse-server --ulimit nofile=262144:262144 clickhouse/clickhouse-server
       ```
-+ IDEA add database
++ IDEA add database, create schema ``watchinsight``
     ```json
         url: localhost
         port: 8123
         user: default
         password: 
+        database: watchinsight
         driver: jdbc:clickhouse://localhost:8123
     ```

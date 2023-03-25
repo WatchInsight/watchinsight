@@ -16,26 +16,19 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse;
+package org.watchinsight.storage.clickhouse.service;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import com.clickhouse.client.ClickHouseRequest;
+import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-23-23:45
+ * @date 2023-03-25-20:47
  */
-@Data
-public class ClickHouseConfig implements ProviderConfig {
+public interface IClickHouseService extends ServiceDefine {
+
+    void createServer();
     
-    private String url;
-    
-    private int port;
-    
-    private String user;
-    
-    private String password;
-    
-    private String database = "watchinsight";
+    ClickHouseRequest<?> getConnect();
     
 }

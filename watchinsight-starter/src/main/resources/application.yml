@@ -44,8 +44,11 @@ receiver:
 storage:
   choices: [ clickhouse, elasticsearch ]
   clickhouse:
-    url: 'tcp://127.0.0.1:9000?dial_timeout=10s&compress=lz4'
-    database: 'otel'
+    url: '127.0.0.1'
+    port: 9000
+    database: 'watchinsight'
+    user: 'default'
+    password: ''
   elasticsearch:
     url: 'http://127.0.0.1:8080'
-    index: 'otel'
+    index: 'watchinsight'
