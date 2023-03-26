@@ -45,7 +45,7 @@ storage:
   choices: [ clickhouse, elasticsearch ]
   clickhouse:
     url: '127.0.0.1'
-    port: 9000
+    port: 8123
     database: 'watchinsight'
     user: 'default'
     password: ''

@@ -71,7 +71,7 @@ public class ClickHouseProvider extends ProviderDefine {
     public void after() {
         try {
             final ClickHouseResponse response = this.connect.query("drop table if exists watchinsight_traces").execute().get();
-            log.info(response.stream().count() + "返回");
+            log.info(response.stream().count() + " 返回");
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage(), e);
         }

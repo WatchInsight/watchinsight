@@ -31,7 +31,7 @@
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <clickhouse-grpc-client.version>0.4.2</clickhouse-grpc-client.version>
+    <clickhouse-http-client.version>0.4.2</clickhouse-http-client.version>
   </properties>
 
   <dependencies>
@@ -42,8 +42,8 @@
     </dependency>
     <dependency>
       <groupId>com.clickhouse</groupId>
-      <artifactId>clickhouse-grpc-client</artifactId>
-      <version>${clickhouse-grpc-client.version}</version>
+      <artifactId>clickhouse-http-client</artifactId>
+      <version>${clickhouse-http-client.version}</version>
     </dependency>
   </dependencies>
 </project>
