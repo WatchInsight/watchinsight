@@ -20,6 +20,7 @@ package org.watchinsight.storage.clickhouse;
 
 import com.clickhouse.client.ClickHouseRequest;
 import com.clickhouse.client.ClickHouseResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.ModuleStartException;
 import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.storage.StorageModule;
@@ -30,6 +31,7 @@ import org.watchinsight.storage.clickhouse.service.IClickHouseService;
  * @author Created by gerry
  * @date 2023-03-23-23:43
  */
+@Slf4j
 public class ClickHouseProvider extends ProviderDefine {
     
     public static final String CLICKHOUSE = "clickhouse";
@@ -69,7 +71,7 @@ public class ClickHouseProvider extends ProviderDefine {
     public void after() {
         try {
             final ClickHouseResponse response = this.connect.query("drop table if exists watchinsight_traces").execute().get();
-            System.out.println(response.stream().count() + "返回");
+            log.info(response.stream().count() + "返回");
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage(), e);
         }

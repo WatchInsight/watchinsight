@@ -23,7 +23,10 @@ import com.clickhouse.client.ClickHouseCredentials;
 import com.clickhouse.client.ClickHouseNode;
 import com.clickhouse.client.ClickHouseProtocol;
 import com.clickhouse.client.ClickHouseRequest;
+import com.clickhouse.client.ClickHouseResponse;
+import com.clickhouse.data.ClickHouseFormat;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.storage.clickhouse.ClickHouseConfig;
 
@@ -62,4 +65,11 @@ public class ClickHouseService implements IClickHouseService {
         return this.request;
     }
     
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        final ClickHouseNode node = ClickHouseNode.of("localhost", ClickHouseProtocol.HTTP, 8123, "default");
+        final ClickHouseResponse response = ClickHouseClient.newInstance(node.getProtocol()).read(node)
+            .format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
+            .query("SELECT version()").execute().get();
+        System.out.println(response.stream().count());
+    }
 }
