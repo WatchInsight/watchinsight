@@ -19,7 +19,6 @@
 package org.watchinsight.storage.clickhouse;
 
 import com.clickhouse.client.ClickHouseRequest;
-import com.clickhouse.client.ClickHouseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.ModuleStartException;
 import org.watchinsight.core.provider.ProviderDefine;
@@ -70,8 +69,10 @@ public class ClickHouseProvider extends ProviderDefine {
     @Override
     public void after() {
         try {
-            final ClickHouseResponse response = this.connect.query("drop table if exists watchinsight_traces").execute().get();
-            log.info(response.stream().count() + " 返回");
+            System.out.println(this.connect.query("drop table if exists watchinsight_traces").execute().get());
+            System.out.println(this.connect
+                .query("create table watchinsight_traces (a String, b Nullable(String)) engine=MergeTree() order by a")
+                .execute().get());
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage(), e);
         }

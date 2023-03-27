@@ -57,7 +57,7 @@ public class ClickHouseService implements IClickHouseService {
             final ClickHouseClient client = ClickHouseClient.newInstance(server.getProtocol());
             this.request = client.read(server).compressServerResponse(false).decompressClientRequest(false);
             log.info("Connected clickhouse server by {} protocol, {} port, {} database", server.getProtocol(),
-                server.getPort(), server.getDatabase(), server.getDatabase().get());
+                server.getPort(), server.getDatabase().get());
         }
         return this.request;
     }
