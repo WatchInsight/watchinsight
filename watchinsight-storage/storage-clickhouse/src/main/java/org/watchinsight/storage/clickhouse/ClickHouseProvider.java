@@ -19,12 +19,17 @@
 package org.watchinsight.storage.clickhouse;
 
 import com.clickhouse.client.ClickHouseRequest;
+import com.google.common.collect.Lists;
+import java.io.FileNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.ModuleStartException;
 import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.storage.StorageModule;
 import org.watchinsight.storage.clickhouse.service.ClickHouseService;
 import org.watchinsight.storage.clickhouse.service.IClickHouseService;
+import org.watchinsight.storage.clickhouse.table.DefaultTableServiceManager;
+import org.watchinsight.storage.clickhouse.table.TableServiceManager;
+import org.watchinsight.storage.clickhouse.table.TraceTableService;
 
 /**
  * @author Created by gerry
@@ -56,26 +61,28 @@ public class ClickHouseProvider extends ProviderDefine {
     @Override
     public void prepare() {
         final ClickHouseService clickHouseService = new ClickHouseService(config);
-        super.register(IClickHouseService.class, clickHouseService);
+        //create clickhouse server
         clickHouseService.createServer();
+        //get clickhouse client
+        this.connect = clickHouseService.getConnect();
+        super.register(IClickHouseService.class, clickHouseService);
+        final TraceTableService traceTableService = new TraceTableService(this.connect);
+        super.register(TraceTableService.class, traceTableService);
+        super.register(TableServiceManager.class, new DefaultTableServiceManager(config.getTables(),
+            Lists.newArrayList(traceTableService)));
     }
     
     @Override
     public void start() {
-        final IClickHouseService service = super.getService(IClickHouseService.class);
-        this.connect = service.getConnect();
+        try {
+            super.getService(TableServiceManager.class).createTables();
+        } catch (Exception e) {
+            throw new ModuleStartException(e.getMessage());
+        }
     }
     
     @Override
     public void after() {
-        try {
-            System.out.println(this.connect.query("drop table if exists watchinsight_traces").execute().get());
-            System.out.println(this.connect
-                .query("create table watchinsight_traces (a String, b Nullable(String)) engine=MergeTree() order by a")
-                .execute().get());
-        } catch (Exception e) {
-            throw new ModuleStartException(e.getMessage(), e);
-        }
     }
     
     @Override

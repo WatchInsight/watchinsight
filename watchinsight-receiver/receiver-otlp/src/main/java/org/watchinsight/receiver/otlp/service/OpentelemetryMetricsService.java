@@ -16,34 +16,26 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse;
+package org.watchinsight.receiver.otlp.service;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceResponse;
+import io.opentelemetry.proto.collector.metrics.v1.MetricsServiceGrpc.MetricsServiceImplBase;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Created by gerry
- * @date 2023-03-23-23:45
+ * @date 2023-03-17-23:45
  */
-@Data
-public class ClickHouseConfig implements ProviderConfig {
+@Slf4j
+public class OpentelemetryMetricsService extends MetricsServiceImplBase implements IOpentelemetryService {
     
-    private String url;
-    
-    private int port;
-    
-    private String user;
-    
-    private String password;
-    
-    private String database = "watchinsight";
-    
-    private String traceTable;
-    
-    private String metricsTable;
-    
-    private String logTable;
-    
-    private String[] tables;
-    
+    @Override
+    public void export(ExportMetricsServiceRequest request,
+        StreamObserver<ExportMetricsServiceResponse> responseObserver) {
+        log.info(request.toString());
+        responseObserver.onNext(ExportMetricsServiceResponse.newBuilder().build());
+        responseObserver.onCompleted();
+    }
 }

@@ -16,34 +16,34 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse;
+package org.watchinsight.storage.clickhouse.table;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import com.clickhouse.client.ClickHouseRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.watchinsight.core.storage.ITableService;
 
 /**
  * @author Created by gerry
- * @date 2023-03-23-23:45
+ * @date 2023-03-30-01:08
  */
-@Data
-public class ClickHouseConfig implements ProviderConfig {
+@Slf4j
+public class TraceTableService implements ITableService {
     
-    private String url;
+    private ClickHouseRequest<?> connect;
     
-    private int port;
+    public TraceTableService(ClickHouseRequest<?> connect) {
+        this.connect = connect;
+    }
     
-    private String user;
+    @Override
+    public String keyPrefix() {
+        return "trace";
+    }
     
-    private String password;
-    
-    private String database = "watchinsight";
-    
-    private String traceTable;
-    
-    private String metricsTable;
-    
-    private String logTable;
-    
-    private String[] tables;
-    
+    @Override
+    public void createTable(String tableName, String sql) throws Exception {
+        final String format = String.format(sql, tableName);
+        connect.query(format).execute().get();
+        log.info("Create [{}] success.", tableName);
+    }
 }

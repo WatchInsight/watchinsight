@@ -31,4 +31,5 @@ public interface IClickHouseService extends ServiceDefine {
     
     ClickHouseRequest<?> getConnect();
     
+    void stop();
 }

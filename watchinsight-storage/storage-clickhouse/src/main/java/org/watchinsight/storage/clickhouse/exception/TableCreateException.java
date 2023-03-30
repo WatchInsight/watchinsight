@@ -16,26 +16,25 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.storage.clickhouse.exception;
 
-import io.grpc.stub.StreamObserver;
-import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest;
-import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceResponse;
-import io.opentelemetry.proto.collector.metrics.v1.MetricsServiceGrpc.MetricsServiceImplBase;
-import lombok.extern.slf4j.Slf4j;
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:45
+ * @date 2021-02-28-9:58 PM
  */
-@Slf4j
-public class OpentelemetryMetricService extends MetricsServiceImplBase implements IOpentelemetryService {
-    
+public class TableCreateException extends RuntimeException implements Supplier<TableCreateException> {
+    public TableCreateException(final String s) {
+        super(s);
+    }
+
+    public TableCreateException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+
     @Override
-    public void export(ExportMetricsServiceRequest request,
-        StreamObserver<ExportMetricsServiceResponse> responseObserver) {
-        log.info(request.toString());
-        responseObserver.onNext(ExportMetricsServiceResponse.newBuilder().build());
-        responseObserver.onCompleted();
+    public TableCreateException get() {
+        return this;
     }
 }

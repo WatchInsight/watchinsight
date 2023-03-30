@@ -49,6 +49,10 @@ storage:
     database: 'watchinsight'
     user: 'default'
     password: ''
+    tables: [ watchinsight_otel_traces, watchinsight_otel_metrics, watchinsight_otel_logs ]
+    traceTable: watchinsight_otel_traces
+    metricsTable: watchinsight_otel_metrics
+    logTable: watchinsight_otel_logs
   elasticsearch:
     url: 'http://127.0.0.1:8080'
     index: 'watchinsight'

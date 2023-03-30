@@ -62,4 +62,8 @@ public class ClickHouseService implements IClickHouseService {
         return this.request;
     }
     
+    @Override
+    public void stop() {
+    }
+    
 }

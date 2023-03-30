@@ -16,34 +16,17 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse;
+package org.watchinsight.storage.clickhouse.table;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import java.io.FileNotFoundException;
+import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-23-23:45
+ * @date 2023-03-31-00:24
  */
-@Data
-public class ClickHouseConfig implements ProviderConfig {
+public interface TableServiceManager extends ServiceDefine {
     
-    private String url;
-    
-    private int port;
-    
-    private String user;
-    
-    private String password;
-    
-    private String database = "watchinsight";
-    
-    private String traceTable;
-    
-    private String metricsTable;
-    
-    private String logTable;
-    
-    private String[] tables;
+    void createTables() throws FileNotFoundException;
     
 }

@@ -16,34 +16,32 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse;
+package org.watchinsight.core.storage;
 
-import lombok.Data;
-import org.watchinsight.core.provider.ProviderConfig;
+import org.watchinsight.core.service.ServiceDefine;
 
 /**
+ * Provider operator for table
+ *
  * @author Created by gerry
- * @date 2023-03-23-23:45
+ * @date 2023-03-30-01:02
  */
-@Data
-public class ClickHouseConfig implements ProviderConfig {
+public interface ITableService extends ServiceDefine {
     
-    private String url;
+    /**
+     * By config init tables
+     *
+     * @param tableName
+     * @param sql
+     * @throws Exception
+     */
+    void createTable(final String tableName, final String sql) throws Exception;
     
-    private int port;
-    
-    private String user;
-    
-    private String password;
-    
-    private String database = "watchinsight";
-    
-    private String traceTable;
-    
-    private String metricsTable;
-    
-    private String logTable;
-    
-    private String[] tables;
+    /**
+     * table prefix
+     *
+     * @return
+     */
+    String keyPrefix();
     
 }

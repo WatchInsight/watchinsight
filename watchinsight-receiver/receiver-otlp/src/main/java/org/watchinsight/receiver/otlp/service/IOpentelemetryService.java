@@ -26,4 +26,5 @@ import org.watchinsight.core.service.ServiceDefine;
  */
 public interface IOpentelemetryService extends ServiceDefine {
 
+    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
 }
