@@ -41,9 +41,10 @@ public class TraceTableService implements ITableService {
     }
     
     @Override
-    public void createTable(String tableName, String sql) throws Exception {
-        final String format = String.format(sql, tableName);
+    public void createTable(String tableName, int ttlDays, String sql) throws Exception {
+        final String format = String.format(sql, tableName, ttlDays);
         connect.query(format).execute().get();
-        log.info("Create [{}] success.", tableName);
+        log.info("Exec create traces table sql: {}", format);
     }
+    
 }

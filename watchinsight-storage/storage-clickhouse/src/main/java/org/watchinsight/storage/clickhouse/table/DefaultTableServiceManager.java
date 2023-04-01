@@ -21,13 +21,13 @@ package org.watchinsight.storage.clickhouse.table;
 import com.google.common.collect.Maps;
 import java.io.FileNotFoundException;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.watchinsight.core.storage.ITableService;
 import org.watchinsight.core.utils.EmptyUtils;
 import org.watchinsight.core.utils.ResourceUtils;
+import org.watchinsight.storage.clickhouse.ClickHouseConfig;
 import org.watchinsight.storage.clickhouse.exception.TableCreateException;
 import org.yaml.snakeyaml.Yaml;
 
@@ -37,13 +37,13 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class DefaultTableServiceManager implements TableServiceManager {
     
-    private String[] tables;
+    private ClickHouseConfig config;
     private List<ITableService> tableServices;
     private Map<String, String> ymls = Maps.newHashMap();
     private Yaml yaml = new Yaml();
     
-    public DefaultTableServiceManager(String[] tables, List<ITableService> tableServices) {
-        this.tables = tables;
+    public DefaultTableServiceManager(ClickHouseConfig config, List<ITableService> tableServices) {
+        this.config = config;
         this.tableServices = tableServices;
     }
     
@@ -54,7 +54,7 @@ public class DefaultTableServiceManager implements TableServiceManager {
             for (ITableService tableService : tableServices) {
                 //TableService's keyPrefix
                 final String keyPrefix = tableService.keyPrefix();
-                final String tableName = Arrays.stream(tables).filter(t -> t.toLowerCase().contains(keyPrefix))
+                final String tableName = config.getTables().stream().filter(t -> t.toLowerCase().contains(keyPrefix))
                     .findFirst()
                     .orElse(null);
                 if (EmptyUtils.isEmpty(tableName)) {
@@ -68,7 +68,7 @@ public class DefaultTableServiceManager implements TableServiceManager {
                     continue;
                 }
                 for (String key : keys) {
-                    tableService.createTable(tableName, ymls.get(key));
+                    tableService.createTable(tableName, config.getTtlDays(), ymls.get(key));
                 }
             }
         } catch (Exception e) {

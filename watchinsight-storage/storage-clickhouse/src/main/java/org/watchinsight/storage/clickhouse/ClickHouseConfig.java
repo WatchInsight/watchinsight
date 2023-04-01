@@ -18,6 +18,7 @@
 
 package org.watchinsight.storage.clickhouse;
 
+import java.util.List;
 import lombok.Data;
 import org.watchinsight.core.provider.ProviderConfig;
 
@@ -38,12 +39,12 @@ public class ClickHouseConfig implements ProviderConfig {
     
     private String database = "watchinsight";
     
-    private String traceTable;
+    /**
+     * Since the arrays in the yml configuration file are loaded as ArrayLists by the YAML, all array properties inside
+     * ProviderConfig should be of the ArrayList type.
+     */
+    private List<String> tables;
     
-    private String metricsTable;
-    
-    private String logTable;
-    
-    private String[] tables;
+    private int ttlDays = 3;
     
 }

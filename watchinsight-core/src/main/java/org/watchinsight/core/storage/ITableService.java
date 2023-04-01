@@ -32,10 +32,11 @@ public interface ITableService extends ServiceDefine {
      * By config init tables
      *
      * @param tableName
+     * @param ttlDays
      * @param sql
      * @throws Exception
      */
-    void createTable(final String tableName, final String sql) throws Exception;
+    void createTable(final String tableName, int ttlDays, final String sql) throws Exception;
     
     /**
      * table prefix

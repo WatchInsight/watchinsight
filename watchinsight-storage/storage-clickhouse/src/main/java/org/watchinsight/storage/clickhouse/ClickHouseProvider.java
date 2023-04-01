@@ -20,7 +20,6 @@ package org.watchinsight.storage.clickhouse;
 
 import com.clickhouse.client.ClickHouseRequest;
 import com.google.common.collect.Lists;
-import java.io.FileNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.ModuleStartException;
 import org.watchinsight.core.provider.ProviderDefine;
@@ -68,7 +67,7 @@ public class ClickHouseProvider extends ProviderDefine {
         super.register(IClickHouseService.class, clickHouseService);
         final TraceTableService traceTableService = new TraceTableService(this.connect);
         super.register(TraceTableService.class, traceTableService);
-        super.register(TableServiceManager.class, new DefaultTableServiceManager(config.getTables(),
+        super.register(TableServiceManager.class, new DefaultTableServiceManager(config,
             Lists.newArrayList(traceTableService)));
     }
     
