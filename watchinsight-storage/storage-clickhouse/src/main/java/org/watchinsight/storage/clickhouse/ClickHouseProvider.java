@@ -26,7 +26,7 @@ import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.storage.StorageModule;
 import org.watchinsight.storage.clickhouse.service.ClickHouseService;
 import org.watchinsight.storage.clickhouse.service.IClickHouseService;
-import org.watchinsight.storage.clickhouse.table.DefaultTableServiceManager;
+import org.watchinsight.storage.clickhouse.table.ClickHouseTableServiceManager;
 import org.watchinsight.storage.clickhouse.table.TableServiceManager;
 import org.watchinsight.storage.clickhouse.table.TraceTableService;
 
@@ -67,7 +67,7 @@ public class ClickHouseProvider extends ProviderDefine {
         super.register(IClickHouseService.class, clickHouseService);
         final TraceTableService traceTableService = new TraceTableService(this.connect);
         super.register(TraceTableService.class, traceTableService);
-        super.register(TableServiceManager.class, new DefaultTableServiceManager(config,
+        super.register(TableServiceManager.class, new ClickHouseTableServiceManager(config,
             Lists.newArrayList(traceTableService)));
     }
     

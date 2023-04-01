@@ -19,6 +19,7 @@
 package org.watchinsight.storage.clickhouse.table;
 
 import com.clickhouse.client.ClickHouseRequest;
+import java.text.MessageFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.storage.ITableService;
 
@@ -42,7 +43,7 @@ public class TraceTableService implements ITableService {
     
     @Override
     public void createTable(String tableName, int ttlDays, String sql) throws Exception {
-        final String format = String.format(sql, tableName, ttlDays);
+        final String format = MessageFormat.format(sql, tableName, ttlDays);
         connect.query(format).execute().get();
         log.info("Exec create traces table sql: {}", format);
     }

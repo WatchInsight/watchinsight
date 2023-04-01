@@ -35,14 +35,14 @@ import org.yaml.snakeyaml.Yaml;
  * @author Created by gerry
  * @date 2023-03-31-00:24
  */
-public class DefaultTableServiceManager implements TableServiceManager {
+public class ClickHouseTableServiceManager implements TableServiceManager {
     
     private ClickHouseConfig config;
     private List<ITableService> tableServices;
     private Map<String, String> ymls = Maps.newHashMap();
     private Yaml yaml = new Yaml();
     
-    public DefaultTableServiceManager(ClickHouseConfig config, List<ITableService> tableServices) {
+    public ClickHouseTableServiceManager(ClickHouseConfig config, List<ITableService> tableServices) {
         this.config = config;
         this.tableServices = tableServices;
     }
