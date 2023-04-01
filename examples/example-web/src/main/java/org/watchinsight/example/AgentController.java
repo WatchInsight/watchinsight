@@ -16,15 +16,22 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.example;
 
-import org.watchinsight.core.service.ServiceDefine;
+import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-29-01:01
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+@RestController("/agent")
+public class AgentController {
+    
+    @GetMapping("/trace")
+    public String trace() {
+        return UUID.randomUUID().toString();
+    }
+    
 }

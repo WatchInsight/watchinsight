@@ -16,15 +16,33 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.core.storage;
 
 import org.watchinsight.core.service.ServiceDefine;
 
 /**
+ * Provider operator for table
+ *
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-30-01:02
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+public interface ITableService extends ServiceDefine {
+    
+    /**
+     * By config init tables
+     *
+     * @param tableName
+     * @param ttlDays
+     * @param sql
+     * @throws Exception
+     */
+    void createTable(final String tableName, int ttlDays, final String sql) throws Exception;
+    
+    /**
+     * table prefix
+     *
+     * @return
+     */
+    String keyPrefix();
+    
 }

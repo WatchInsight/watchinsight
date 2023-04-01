@@ -16,15 +16,22 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.receiver.oltp.test;
 
+import io.opentelemetry.proto.trace.v1.Span;
 import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-19-23:46
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+public interface IGprcExampleService extends ServiceDefine {
+    
+    Span newSpans();
+    
+    void newChannel();
+    
+    void export(Span span);
+    
+    void stop();
 }

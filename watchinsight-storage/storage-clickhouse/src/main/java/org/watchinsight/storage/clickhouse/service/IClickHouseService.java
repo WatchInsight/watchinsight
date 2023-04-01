@@ -16,15 +16,20 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.storage.clickhouse.service;
 
+import com.clickhouse.client.ClickHouseRequest;
 import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-25-20:47
  */
-public interface IOpentelemetryService extends ServiceDefine {
+public interface IClickHouseService extends ServiceDefine {
 
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+    void createServer();
+    
+    ClickHouseRequest<?> getConnect();
+    
+    void stop();
 }

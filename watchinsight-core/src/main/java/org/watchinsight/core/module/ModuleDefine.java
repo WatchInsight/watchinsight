@@ -46,7 +46,8 @@ public abstract class ModuleDefine {
         ServiceLoader<ProviderDefine> providerDefines) {
         final List<ProviderDefine> providers = new ArrayList<>();
         for (ProviderConfiguration provider : moduleConfiguration.getProviders()) {
-            final ProviderDefine providerDefine = getProviderDefine(moduleConfiguration.getName(), provider.getName(), providerDefines);
+            final ProviderDefine providerDefine = getProviderDefine(moduleConfiguration.getName(), provider.getName(),
+                providerDefines);
             if (Objects.isNull(providerDefine)) {
                 continue;
             }

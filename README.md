@@ -20,6 +20,10 @@ public class WatchInsightStarter {
 
 }
 ```
+# Features
+- [x] Support`Trace` `Metric` `Log` send to watchinsight server and process.
+- [x] Support`Trace` `Metric` `Log` send to clickhouse storage
+- [x] Create clickhouse tables for `Trace` `Metric` `Log`
 # How to build
 Follow this [document](docs/guides/How-to-build.md)
 # Downloads

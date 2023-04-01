@@ -20,6 +20,7 @@ core:
   ##provider transports for http&grpc&kafka
   http:
     url: 1
+    port: 19100
   grpc:
     host: '0.0.0.0'
     port: 19090
@@ -27,12 +28,6 @@ core:
     workThreads: 100
   kafka:
     url: 3
-
-example:
-  choices: [ grpc ]
-  grpc:
-    grpcHost: '127.0.0.1'
-    grpcPort: 19090
 
 receiver:
   ##data format support otlp&meter
@@ -47,7 +42,15 @@ receiver:
     logs: c
 
 storage:
-  choices: [ clickhouse ]
+  choices: [ clickhouse, elasticsearch ]
   clickhouse:
+    url: '127.0.0.1'
+    port: 8123
+    database: 'watchinsight'
+    user: 'default'
+    password: ''
+    tables: [ watchinsight_otel_traces, watchinsight_otel_metrics, watchinsight_otel_logs ]
+    ttlDays: 3
   elasticsearch:
-
+    url: 'http://127.0.0.1:8080'
+    index: 'watchinsight'

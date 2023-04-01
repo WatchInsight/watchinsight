@@ -16,15 +16,20 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.core.storage;
 
-import org.watchinsight.core.service.ServiceDefine;
+import org.watchinsight.core.module.ModuleDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-23-23:52
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+public class StorageModule extends ModuleDefine {
+    
+    public static final String STORAGE = "storage";
+    
+    @Override
+    public String module() {
+        return STORAGE;
+    }
 }

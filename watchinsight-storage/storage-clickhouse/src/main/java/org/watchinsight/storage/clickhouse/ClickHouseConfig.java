@@ -16,15 +16,35 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.storage.clickhouse;
 
-import org.watchinsight.core.service.ServiceDefine;
+import java.util.List;
+import lombok.Data;
+import org.watchinsight.core.provider.ProviderConfig;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-23-23:45
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+@Data
+public class ClickHouseConfig implements ProviderConfig {
+    
+    private String url;
+    
+    private int port;
+    
+    private String user;
+    
+    private String password;
+    
+    private String database = "watchinsight";
+    
+    /**
+     * Since the arrays in the yml configuration file are loaded as ArrayLists by the YAML, all array properties inside
+     * ProviderConfig should be of the ArrayList type.
+     */
+    private List<String> tables;
+    
+    private int ttlDays = 3;
+    
 }

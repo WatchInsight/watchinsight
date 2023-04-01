@@ -22,7 +22,7 @@
   <parent>
     <artifactId>watchinsight</artifactId>
     <groupId>org.watchinsight</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -46,10 +46,10 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!-- Example Module-->
+    <!-- Storage Module-->
     <dependency>
       <groupId>org.watchinsight</groupId>
-      <artifactId>watchinsight-example</artifactId>
+      <artifactId>storage-clickhouse</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -116,7 +116,7 @@
             </goals>
             <configuration>
               <tasks>
-                <copy file="${project.build.directory}/watchinsight-all-bin.tar.gz" tofile="${project.basedir}/../dist/watchinsight-all-bin.tar.gz" overwrite="true" />
+                <copy file="${project.build.directory}/watchinsight-all-in-one.tar.gz" tofile="${project.basedir}/../dist/watchinsight-all-in-one.tar.gz" overwrite="true" />
               </tasks>
             </configuration>
           </execution>

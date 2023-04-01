@@ -16,15 +16,35 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.storage.clickhouse.table;
 
-import org.watchinsight.core.service.ServiceDefine;
+import com.clickhouse.client.ClickHouseRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.watchinsight.core.storage.ITableService;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-30-01:08
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+@Slf4j
+public class TraceTableService implements ITableService {
+    
+    private ClickHouseRequest<?> connect;
+    
+    public TraceTableService(ClickHouseRequest<?> connect) {
+        this.connect = connect;
+    }
+    
+    @Override
+    public String keyPrefix() {
+        return "trace";
+    }
+    
+    @Override
+    public void createTable(String tableName, int ttlDays, String sql) throws Exception {
+        final String format = String.format(sql, tableName, ttlDays);
+        connect.query(format).execute().get();
+        log.info("Exec create traces table sql: {}", format);
+    }
+    
 }

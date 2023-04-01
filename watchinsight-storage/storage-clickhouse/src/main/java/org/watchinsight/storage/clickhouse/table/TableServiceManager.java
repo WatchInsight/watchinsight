@@ -16,15 +16,17 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.storage.clickhouse.table;
 
+import java.io.FileNotFoundException;
 import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-31-00:24
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+public interface TableServiceManager extends ServiceDefine {
+    
+    void createTables() throws FileNotFoundException;
+    
 }

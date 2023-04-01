@@ -18,13 +18,24 @@
 
 package org.watchinsight.receiver.otlp.service;
 
-import org.watchinsight.core.service.ServiceDefine;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest;
+import io.opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceResponse;
+import io.opentelemetry.proto.collector.metrics.v1.MetricsServiceGrpc.MetricsServiceImplBase;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2023-03-17-23:45
  */
-public interface IOpentelemetryService extends ServiceDefine {
-
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+@Slf4j
+public class OpentelemetryMetricsService extends MetricsServiceImplBase implements IOpentelemetryService {
+    
+    @Override
+    public void export(ExportMetricsServiceRequest request,
+        StreamObserver<ExportMetricsServiceResponse> responseObserver) {
+        log.info(request.toString());
+        responseObserver.onNext(ExportMetricsServiceResponse.newBuilder().build());
+        responseObserver.onCompleted();
+    }
 }

@@ -16,15 +16,25 @@
  *
  */
 
-package org.watchinsight.receiver.otlp.service;
+package org.watchinsight.storage.clickhouse.exception;
 
-import org.watchinsight.core.service.ServiceDefine;
+import java.util.function.Supplier;
 
 /**
  * @author Created by gerry
- * @date 2023-03-17-23:44
+ * @date 2021-02-28-9:58 PM
  */
-public interface IOpentelemetryService extends ServiceDefine {
+public class TableCreateException extends RuntimeException implements Supplier<TableCreateException> {
+    public TableCreateException(final String s) {
+        super(s);
+    }
 
-    //TODO 负责接受处理Agent发送过来的Trace、Metrics、Log数据
+    public TableCreateException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+
+    @Override
+    public TableCreateException get() {
+        return this;
+    }
 }
