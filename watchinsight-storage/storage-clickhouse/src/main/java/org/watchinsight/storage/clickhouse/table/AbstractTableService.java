@@ -18,27 +18,28 @@
 
 package org.watchinsight.storage.clickhouse.table;
 
-import java.io.FileNotFoundException;
-import org.watchinsight.core.storage.IDBService;
+import com.clickhouse.client.ClickHouseRequest;
+import java.text.MessageFormat;
+import lombok.extern.slf4j.Slf4j;
+import org.watchinsight.core.storage.ITableService;
 
 /**
  * @author Created by gerry
- * @date 2023-03-31-00:24
+ * @date 2023-04-03-23:56
  */
-public interface DBManager extends IDBService {
+@Slf4j
+public abstract class AbstractTableService implements ITableService {
     
-    /**
-     * create database for clickhouse
-     *
-     * @param database
-     */
-    void createDatabase(String database);
+    private ClickHouseRequest<?> connect;
     
-    /**
-     * create tables for clickhouse
-     *
-     * @throws FileNotFoundException
-     */
-    void createTables() throws FileNotFoundException;
+    public AbstractTableService(ClickHouseRequest<?> connect) {
+        this.connect = connect;
+    }
     
+    @Override
+    public void createTable(String tableName, int ttlDays, String sql) throws Exception {
+        final String format = MessageFormat.format(sql, tableName, ttlDays);
+        connect.query(format).execute().get();
+        log.info("Exec create traces table sql: {}", format);
+    }
 }

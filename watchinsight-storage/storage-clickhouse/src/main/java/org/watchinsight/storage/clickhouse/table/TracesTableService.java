@@ -19,33 +19,22 @@
 package org.watchinsight.storage.clickhouse.table;
 
 import com.clickhouse.client.ClickHouseRequest;
-import java.text.MessageFormat;
 import lombok.extern.slf4j.Slf4j;
-import org.watchinsight.core.storage.ITableService;
 
 /**
  * @author Created by gerry
  * @date 2023-03-30-01:08
  */
 @Slf4j
-public class TraceTableService implements ITableService {
+public class TracesTableService extends AbstractTableService {
     
-    private ClickHouseRequest<?> connect;
-    
-    public TraceTableService(ClickHouseRequest<?> connect) {
-        this.connect = connect;
+    public TracesTableService(ClickHouseRequest<?> connect) {
+        super(connect);
     }
     
     @Override
     public String keyPrefix() {
         return "trace";
-    }
-    
-    @Override
-    public void createTable(String tableName, int ttlDays, String sql) throws Exception {
-        final String format = MessageFormat.format(sql, tableName, ttlDays);
-        connect.query(format).execute().get();
-        log.info("Exec create traces table sql: {}", format);
     }
     
 }

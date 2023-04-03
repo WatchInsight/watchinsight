@@ -23,12 +23,14 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.ModuleStartException;
 import org.watchinsight.core.provider.ProviderDefine;
+import org.watchinsight.core.storage.IDBService;
 import org.watchinsight.core.storage.StorageModule;
 import org.watchinsight.storage.clickhouse.service.ClickHouseService;
 import org.watchinsight.storage.clickhouse.service.IClickHouseService;
 import org.watchinsight.storage.clickhouse.table.ClickHouseDBManager;
-import org.watchinsight.storage.clickhouse.table.DBManager;
-import org.watchinsight.storage.clickhouse.table.TraceTableService;
+import org.watchinsight.storage.clickhouse.table.LogsTableService;
+import org.watchinsight.storage.clickhouse.table.MetricsTableService;
+import org.watchinsight.storage.clickhouse.table.TracesTableService;
 
 /**
  * @author Created by gerry
@@ -65,18 +67,17 @@ public class ClickHouseProvider extends ProviderDefine {
         //get clickhouse client
         this.client = clickHouseService.getConnect();
         super.register(IClickHouseService.class, clickHouseService);
-        final TraceTableService traceTableService = new TraceTableService(client);
-        super.register(TraceTableService.class, traceTableService);
-        super.register(DBManager.class,
-            new ClickHouseDBManager(config, client, Lists.newArrayList(traceTableService)));
+        super.register(IDBService.class, new ClickHouseDBManager(config, client,
+            Lists.newArrayList(new TracesTableService(client), new MetricsTableService(client),
+                new LogsTableService(client))));
     }
     
     @Override
     public void start() {
         try {
-            final DBManager dbManager = super.getService(DBManager.class);
-            dbManager.createDatabase(config.getDatabase());
-            dbManager.createTables();
+            final IDBService dbService = super.getService(IDBService.class);
+            dbService.createDatabase(config.getDatabase());
+            dbService.createTables();
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage());
         }

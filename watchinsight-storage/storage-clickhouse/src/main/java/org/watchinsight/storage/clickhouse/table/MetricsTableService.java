@@ -16,28 +16,22 @@
  *
  */
 
-package org.watchinsight.core.storage;
+package org.watchinsight.storage.clickhouse.table;
 
-import java.io.FileNotFoundException;
-import org.watchinsight.core.service.ServiceDefine;
+import com.clickhouse.client.ClickHouseRequest;
 
 /**
  * @author Created by gerry
- * @date 2023-04-02-00:52
+ * @date 2023-04-03-23:42
  */
-public interface IDBService extends ServiceDefine {
+public class MetricsTableService extends AbstractTableService {
     
-    /**
-     * create database for db
-     *
-     * @param database
-     */
-    void createDatabase(String database);
+    public MetricsTableService(ClickHouseRequest<?> connect) {
+        super(connect);
+    }
     
-    /**
-     * create tables for db
-     *
-     * @throws FileNotFoundException
-     */
-    void createTables() throws FileNotFoundException;
+    @Override
+    public String keyPrefix() {
+        return "metric";
+    }
 }

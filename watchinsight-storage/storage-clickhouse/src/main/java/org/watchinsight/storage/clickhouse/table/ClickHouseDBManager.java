@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.DBCreateException;
+import org.watchinsight.core.storage.IDBService;
 import org.watchinsight.core.storage.ITableService;
 import org.watchinsight.core.utils.EmptyUtils;
 import org.watchinsight.core.utils.ResourceUtils;
@@ -38,7 +39,7 @@ import org.yaml.snakeyaml.Yaml;
  * @date 2023-03-31-00:24
  */
 @Slf4j
-public class ClickHouseDBManager implements DBManager {
+public class ClickHouseDBManager implements IDBService {
     
     private ClickHouseConfig config;
     
