@@ -16,25 +16,29 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse.exception;
+package org.watchinsight.storage.clickhouse.table;
 
-import java.util.function.Supplier;
+import java.io.FileNotFoundException;
+import org.watchinsight.core.storage.IDBService;
 
 /**
  * @author Created by gerry
- * @date 2021-02-28-9:58 PM
+ * @date 2023-03-31-00:24
  */
-public class TableCreateException extends RuntimeException implements Supplier<TableCreateException> {
-    public TableCreateException(final String s) {
-        super(s);
-    }
-
-    public TableCreateException(final String s, final Exception ex) {
-        super(s, ex);
-    }
-
-    @Override
-    public TableCreateException get() {
-        return this;
-    }
+public interface DBManager extends IDBService {
+    
+    /**
+     * create database for clickhouse
+     *
+     * @param database
+     */
+    void createDatabase(String database);
+    
+    /**
+     * create tables for clickhouse
+     *
+     * @throws FileNotFoundException
+     */
+    void createTables() throws FileNotFoundException;
+    
 }

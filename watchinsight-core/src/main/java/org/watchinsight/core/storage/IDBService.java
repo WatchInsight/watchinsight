@@ -16,17 +16,20 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse.table;
+package org.watchinsight.core.storage;
 
-import java.io.FileNotFoundException;
 import org.watchinsight.core.service.ServiceDefine;
 
 /**
  * @author Created by gerry
- * @date 2023-03-31-00:24
+ * @date 2023-04-02-00:52
  */
-public interface TableServiceManager extends ServiceDefine {
+public interface IDBService extends ServiceDefine {
     
-    void createTables() throws FileNotFoundException;
-    
+    /**
+     * create database for db
+     *
+     * @param database
+     */
+    void createDatabase(String database);
 }

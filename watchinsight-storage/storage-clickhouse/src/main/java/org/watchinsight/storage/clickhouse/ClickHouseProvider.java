@@ -26,8 +26,8 @@ import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.storage.StorageModule;
 import org.watchinsight.storage.clickhouse.service.ClickHouseService;
 import org.watchinsight.storage.clickhouse.service.IClickHouseService;
-import org.watchinsight.storage.clickhouse.table.ClickHouseTableServiceManager;
-import org.watchinsight.storage.clickhouse.table.TableServiceManager;
+import org.watchinsight.storage.clickhouse.table.ClickHouseDBManager;
+import org.watchinsight.storage.clickhouse.table.DBManager;
 import org.watchinsight.storage.clickhouse.table.TraceTableService;
 
 /**
@@ -41,7 +41,7 @@ public class ClickHouseProvider extends ProviderDefine {
     
     private ClickHouseConfig config;
     
-    private ClickHouseRequest<?> connect;
+    private ClickHouseRequest<?> client;
     
     public ClickHouseProvider() {
         this.config = new ClickHouseConfig();
@@ -63,18 +63,20 @@ public class ClickHouseProvider extends ProviderDefine {
         //create clickhouse server
         clickHouseService.createServer();
         //get clickhouse client
-        this.connect = clickHouseService.getConnect();
+        this.client = clickHouseService.getConnect();
         super.register(IClickHouseService.class, clickHouseService);
-        final TraceTableService traceTableService = new TraceTableService(this.connect);
+        final TraceTableService traceTableService = new TraceTableService(client);
         super.register(TraceTableService.class, traceTableService);
-        super.register(TableServiceManager.class, new ClickHouseTableServiceManager(config,
-            Lists.newArrayList(traceTableService)));
+        super.register(DBManager.class,
+            new ClickHouseDBManager(config, client, Lists.newArrayList(traceTableService)));
     }
     
     @Override
     public void start() {
         try {
-            super.getService(TableServiceManager.class).createTables();
+            final DBManager dbManager = super.getService(DBManager.class);
+            dbManager.createDatabase(config.getDatabase());
+            dbManager.createTables();
         } catch (Exception e) {
             throw new ModuleStartException(e.getMessage());
         }

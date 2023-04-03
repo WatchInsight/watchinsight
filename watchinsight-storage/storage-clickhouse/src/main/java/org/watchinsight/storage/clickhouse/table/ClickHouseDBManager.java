@@ -18,33 +18,57 @@
 
 package org.watchinsight.storage.clickhouse.table;
 
+import com.clickhouse.client.ClickHouseRequest;
 import com.google.common.collect.Maps;
 import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.watchinsight.core.exception.DBCreateException;
 import org.watchinsight.core.storage.ITableService;
 import org.watchinsight.core.utils.EmptyUtils;
 import org.watchinsight.core.utils.ResourceUtils;
 import org.watchinsight.storage.clickhouse.ClickHouseConfig;
-import org.watchinsight.storage.clickhouse.exception.TableCreateException;
 import org.yaml.snakeyaml.Yaml;
 
 /**
  * @author Created by gerry
  * @date 2023-03-31-00:24
  */
-public class ClickHouseTableServiceManager implements TableServiceManager {
+@Slf4j
+public class ClickHouseDBManager implements DBManager {
     
     private ClickHouseConfig config;
+    
+    private ClickHouseRequest<?> client;
+    
     private List<ITableService> tableServices;
+    
     private Map<String, String> ymls = Maps.newHashMap();
+    
     private Yaml yaml = new Yaml();
     
-    public ClickHouseTableServiceManager(ClickHouseConfig config, List<ITableService> tableServices) {
+    public ClickHouseDBManager(ClickHouseConfig config, ClickHouseRequest<?> client,
+        List<ITableService> tableServices) {
         this.config = config;
+        this.client = client;
         this.tableServices = tableServices;
+    }
+    
+    @Override
+    public void createDatabase(String database) {
+        try {
+            final String createSql = String.format("CREATE DATABASE IF NOT EXISTS %s;", database);
+            client.query(createSql).execute().get();
+            log.info("Exec create database sql: {}", createSql);
+            final String useSql = String.format("use %s;", database);
+            client.query(useSql).execute().get();
+            log.info("Exec use database sql: {}", useSql);
+        } catch (Exception e) {
+            throw new DBCreateException(e.getMessage());
+        }
     }
     
     @Override
@@ -58,7 +82,7 @@ public class ClickHouseTableServiceManager implements TableServiceManager {
                     .findFirst()
                     .orElse(null);
                 if (EmptyUtils.isEmpty(tableName)) {
-                    throw new TableCreateException(
+                    throw new DBCreateException(
                         "Storage module clickHouse provider's config file not exist prefix is [" + keyPrefix
                             + "] table name");
                 }
@@ -72,7 +96,7 @@ public class ClickHouseTableServiceManager implements TableServiceManager {
                 }
             }
         } catch (Exception e) {
-            throw new TableCreateException(e.getMessage());
+            throw new DBCreateException(e.getMessage());
         }
         
     }

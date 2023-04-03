@@ -16,33 +16,25 @@
  *
  */
 
-package org.watchinsight.core.storage;
+package org.watchinsight.core.exception;
 
-import org.watchinsight.core.service.ServiceDefine;
+import java.util.function.Supplier;
 
 /**
- * Provider operator for table
- *
  * @author Created by gerry
- * @date 2023-03-30-01:02
+ * @date 2021-02-28-9:58 PM
  */
-public interface ITableService extends ServiceDefine {
-    
-    /**
-     * By config init tables for db
-     *
-     * @param tableName
-     * @param ttlDays
-     * @param sql
-     * @throws Exception
-     */
-    void createTable(final String tableName, int ttlDays, final String sql) throws Exception;
-    
-    /**
-     * table prefix
-     *
-     * @return
-     */
-    String keyPrefix();
-    
+public class DBCreateException extends RuntimeException implements Supplier<DBCreateException> {
+    public DBCreateException(final String s) {
+        super(s);
+    }
+
+    public DBCreateException(final String s, final Exception ex) {
+        super(s, ex);
+    }
+
+    @Override
+    public DBCreateException get() {
+        return this;
+    }
 }
