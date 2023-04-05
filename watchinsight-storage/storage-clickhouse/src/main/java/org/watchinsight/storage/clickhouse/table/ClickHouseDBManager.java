@@ -83,9 +83,10 @@ public class ClickHouseDBManager implements IDBService {
                     .findFirst()
                     .orElse(null);
                 if (EmptyUtils.isEmpty(tableName)) {
-                    throw new DBCreateException(
-                        "Storage module clickHouse provider's config file not exist prefix is [" + keyPrefix
-                            + "] table name");
+                    log.warn(
+                        "Storage module clickHouse provider's config file not exist prefix is [{}] table name, it's ignored.",
+                        keyPrefix);
+                    continue;
                 }
                 final List<String> keys = ymls.keySet().stream().filter(t -> t.toLowerCase().contains(keyPrefix))
                     .collect(Collectors.toList());
