@@ -23,7 +23,6 @@ import com.clickhouse.client.ClickHouseCredentials;
 import com.clickhouse.client.ClickHouseNode;
 import com.clickhouse.client.ClickHouseProtocol;
 import com.clickhouse.client.ClickHouseRequest;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.storage.clickhouse.ClickHouseConfig;
 
@@ -38,8 +37,6 @@ public class ClickHouseService implements IClickHouseService {
     
     private ClickHouseNode server;
     
-    private ClickHouseRequest<?> request;
-    
     public ClickHouseService(ClickHouseConfig config) {
         this.config = config;
     }
@@ -49,16 +46,13 @@ public class ClickHouseService implements IClickHouseService {
         this.server = ClickHouseNode.builder().host(config.getUrl()).port(ClickHouseProtocol.HTTP, config.getPort())
             .database(config.getDatabase())
             .credentials(ClickHouseCredentials.fromUserAndPassword(config.getUser(), config.getPassword())).build();
+        log.info("Create clickhouse server by {} protocol, {} port", server.getProtocol(), server.getPort());
     }
     
     @Override
     public ClickHouseRequest<?> getConnect() {
-        if (Objects.isNull(this.request)) {
-            final ClickHouseClient client = ClickHouseClient.newInstance(server.getProtocol());
-            this.request = client.read(server).compressServerResponse(false).decompressClientRequest(false);
-            log.info("Connected clickhouse server by {} protocol, {} port", server.getProtocol(), server.getPort());
-        }
-        return this.request;
+        final ClickHouseClient client = ClickHouseClient.newInstance(server.getProtocol());
+        return client.read(server).compressServerResponse(false).decompressClientRequest(false);
     }
     
     @Override

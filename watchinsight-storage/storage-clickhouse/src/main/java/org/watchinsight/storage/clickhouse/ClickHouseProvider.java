@@ -18,7 +18,6 @@
 
 package org.watchinsight.storage.clickhouse;
 
-import com.clickhouse.client.ClickHouseRequest;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.watchinsight.core.exception.ModuleStartException;
@@ -43,8 +42,6 @@ public class ClickHouseProvider extends ProviderDefine {
     
     private ClickHouseConfig config;
     
-    private ClickHouseRequest<?> client;
-    
     public ClickHouseProvider() {
         this.config = new ClickHouseConfig();
     }
@@ -64,12 +61,11 @@ public class ClickHouseProvider extends ProviderDefine {
         final ClickHouseService clickHouseService = new ClickHouseService(config);
         //create clickhouse server
         clickHouseService.createServer();
-        //get clickhouse client
-        this.client = clickHouseService.getConnect();
         super.register(IClickHouseService.class, clickHouseService);
-        super.register(IDBService.class, new ClickHouseDBManager(config, client,
-            Lists.newArrayList(new TracesTableService(client), new MetricsTableService(client),
-                new LogsTableService(client))));
+        super.register(IDBService.class, new ClickHouseDBManager(config, clickHouseService.getConnect(),
+            Lists.newArrayList(new TracesTableService(clickHouseService.getConnect()),
+                new MetricsTableService(clickHouseService.getConnect()),
+                new LogsTableService(clickHouseService.getConnect()))));
     }
     
     @Override
