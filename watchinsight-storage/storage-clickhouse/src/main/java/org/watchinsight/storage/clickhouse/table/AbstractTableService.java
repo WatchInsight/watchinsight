@@ -42,4 +42,5 @@ public abstract class AbstractTableService implements ITableService {
         connect.query(format).execute().get();
         log.info("Exec create traces table sql: {}", format);
     }
+    
 }

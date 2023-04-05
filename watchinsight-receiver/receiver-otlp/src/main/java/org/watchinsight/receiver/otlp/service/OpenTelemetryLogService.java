@@ -16,26 +16,25 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse.table;
+package org.watchinsight.receiver.otlp.service;
 
-import com.clickhouse.client.ClickHouseRequest;
+import io.grpc.stub.StreamObserver;
+import io.opentelemetry.proto.collector.logs.v1.ExportLogsServiceRequest;
+import io.opentelemetry.proto.collector.logs.v1.ExportLogsServiceResponse;
+import io.opentelemetry.proto.collector.logs.v1.LogsServiceGrpc.LogsServiceImplBase;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Created by gerry
- * @date 2023-04-03-23:42
+ * @date 2023-04-05-16:22
  */
-public class MetricsTableService extends AbstractTableService {
-    
-    public MetricsTableService(ClickHouseRequest<?> connect) {
-        super(connect);
-    }
+@Slf4j
+public class OpenTelemetryLogService extends LogsServiceImplBase implements IOpentelemetryService {
     
     @Override
-    public void insertTable(String tableName, String sql) throws Exception {
-    }
-    
-    @Override
-    public String keyPrefix() {
-        return "metric";
+    public void export(ExportLogsServiceRequest request, StreamObserver<ExportLogsServiceResponse> responseObserver) {
+        log.info(request.toString());
+        responseObserver.onNext(ExportLogsServiceResponse.newBuilder().build());
+        responseObserver.onCompleted();
     }
 }

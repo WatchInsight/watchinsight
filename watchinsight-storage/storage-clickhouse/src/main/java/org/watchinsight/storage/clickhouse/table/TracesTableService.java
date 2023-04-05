@@ -33,6 +33,11 @@ public class TracesTableService extends AbstractTableService {
     }
     
     @Override
+    public void insertTable(String tableName, String sql) throws Exception {
+    
+    }
+    
+    @Override
     public String keyPrefix() {
         return "trace";
     }

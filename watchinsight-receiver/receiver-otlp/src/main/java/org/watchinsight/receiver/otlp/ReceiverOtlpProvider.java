@@ -23,6 +23,7 @@ import org.watchinsight.core.CoreModule;
 import org.watchinsight.core.provider.ProviderDefine;
 import org.watchinsight.core.receiver.ReceiverModule;
 import org.watchinsight.core.service.IServerService;
+import org.watchinsight.receiver.otlp.service.OpenTelemetryLogService;
 import org.watchinsight.receiver.otlp.service.OpenTelemetryTraceService;
 import org.watchinsight.receiver.otlp.service.OpentelemetryMetricsService;
 
@@ -54,15 +55,17 @@ public class ReceiverOtlpProvider extends ProviderDefine {
     public void prepare() {
         super.register(OpenTelemetryTraceService.class, new OpenTelemetryTraceService());
         super.register(OpentelemetryMetricsService.class, new OpentelemetryMetricsService());
+        super.register(OpenTelemetryLogService.class, new OpenTelemetryLogService());
+        
     }
     
     @Override
     public void start() {
         final OpenTelemetryTraceService traceService = super.getService(OpenTelemetryTraceService.class);
         final OpentelemetryMetricsService metricService = super.getService(OpentelemetryMetricsService.class);
-        super.find(CoreModule.CORE, CoreGprcProvider.GRPC).getService(IServerService.class)
-            .addService(metricService)
-            .addService(traceService);
+        final OpenTelemetryLogService logService = super.getService(OpenTelemetryLogService.class);
+        super.find(CoreModule.CORE, CoreGprcProvider.GRPC).getService(IServerService.class).addService(metricService)
+            .addService(traceService).addService(logService);
     }
     
     @Override

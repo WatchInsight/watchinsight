@@ -22,6 +22,7 @@ import io.grpc.stub.StreamObserver;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest;
 import io.opentelemetry.proto.collector.trace.v1.ExportTraceServiceResponse;
 import io.opentelemetry.proto.collector.trace.v1.TraceServiceGrpc.TraceServiceImplBase;
+import io.opentelemetry.proto.trace.v1.ResourceSpans;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,6 +35,9 @@ public class OpenTelemetryTraceService extends TraceServiceImplBase implements I
     @Override
     public void export(ExportTraceServiceRequest request, StreamObserver<ExportTraceServiceResponse> responseObserver) {
         log.info(request.toString());
+        for (ResourceSpans spans : request.getResourceSpansList()) {
+        
+        }
         responseObserver.onNext(ExportTraceServiceResponse.newBuilder().build());
         responseObserver.onCompleted();
     }
