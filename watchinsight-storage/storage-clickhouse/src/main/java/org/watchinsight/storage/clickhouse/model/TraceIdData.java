@@ -19,8 +19,6 @@
 package org.watchinsight.storage.clickhouse.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 import lombok.Data;
 import org.watchinsight.core.model.StorageData;
 
@@ -29,58 +27,12 @@ import org.watchinsight.core.model.StorageData;
  * @date 2023-04-09-22:38
  */
 @Data
-public class TraceData implements StorageData {
-    
-    private LocalDateTime Timestamp;
+public class TraceIdData implements StorageData {
     
     private String TraceId;
     
-    private String SpanId;
+    private LocalDateTime Start;
     
-    private String ParentSpanId;
+    private LocalDateTime End;
     
-    private String TraceState;
-    
-    private String SpanName;
-    
-    private String SpanKind;
-    
-    private String ServiceName;
-    
-    private Map<String, String> ResourceAttributes;
-    
-    private Map<String, String> SpanAttributes;
-    
-    private Long Duration;
-    
-    private String StatusCode;
-    
-    private String StatusMessage;
-    
-    private List<Event> Events;
-    
-    private List<Link> Links;
-    
-    @Data
-    public static class Event {
-        
-        private LocalDateTime Timestamp;
-        
-        private String Name;
-        
-        private Map<String, String> Attributes;
-    }
-    
-    @Data
-    public static class Link {
-        
-        private String TraceId;
-        
-        private String SpanId;
-        
-        private String TraceState;
-        
-        private Map<String, String> Attributes;
-        
-    }
 }
