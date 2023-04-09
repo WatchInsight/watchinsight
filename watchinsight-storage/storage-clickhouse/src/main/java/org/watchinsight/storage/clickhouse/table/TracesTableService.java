@@ -20,6 +20,7 @@ package org.watchinsight.storage.clickhouse.table;
 
 import com.clickhouse.client.ClickHouseRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.watchinsight.core.model.StorageData;
 
 /**
  * @author Created by gerry
@@ -33,8 +34,7 @@ public class TracesTableService extends AbstractTableService {
     }
     
     @Override
-    public void insertTable(String tableName, String sql) throws Exception {
-    
+    public <T extends StorageData> void insertTable(T storageData) throws Exception {
     }
     
     @Override

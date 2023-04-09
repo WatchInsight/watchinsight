@@ -16,27 +16,12 @@
  *
  */
 
-package org.watchinsight.storage.clickhouse.table;
-
-import com.clickhouse.client.ClickHouseRequest;
-import org.watchinsight.core.model.StorageData;
+package org.watchinsight.core.model;
 
 /**
  * @author Created by gerry
- * @date 2023-04-03-23:42
+ * @date 2023-04-09-22:46
  */
-public class LogsTableService extends AbstractTableService {
-    
-    public LogsTableService(ClickHouseRequest<?> connect) {
-        super(connect);
-    }
-    
-    @Override
-    public <T extends StorageData> void insertTable(T storageData) throws Exception {
-    }
-    
-    @Override
-    public String keyPrefix() {
-        return "log";
-    }
+public interface StorageData {
+
 }

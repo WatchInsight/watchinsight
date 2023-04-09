@@ -18,6 +18,7 @@
 
 package org.watchinsight.core.storage;
 
+import org.watchinsight.core.model.StorageData;
 import org.watchinsight.core.service.ServiceDefine;
 
 /**
@@ -41,11 +42,10 @@ public interface ITableService extends ServiceDefine {
     /**
      * insert data to db
      *
-     * @param tableName
-     * @param sql
+     * @param storageData
      * @throws Exception
      */
-    void insertTable(final String tableName, final String sql) throws Exception;
+    <T extends StorageData> void insertTable(final T storageData) throws Exception;
     
     /**
      * table prefix
