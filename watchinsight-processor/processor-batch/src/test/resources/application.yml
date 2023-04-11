@@ -20,10 +20,10 @@ core:
   ##provider transports for http&grpc&kafka
   http:
     url: 1
-    port: 19100
+    port: 19101
   grpc:
     host: '0.0.0.0'
-    port: 19090
+    port: 19091
     token: '123456'
     workThreads: 100
   kafka:
@@ -41,26 +41,8 @@ receiver:
     trace: ccc
     logs: c
 
-prcessor:
-  choices: [ batch, limit ]
-  batch:
-    mode: async
-    traceRecords: 10000
-    metricRecords: 10000
-    logRecords: 10000
-  limit:
-    mode: sync
-
 storage:
-  choices: [ clickhouse, elasticsearch ]
+  choices: [ clickhouse ]
   clickhouse:
-    url: '127.0.0.1'
-    port: 8123
-    database: 'watchinsight'
-    user: 'default'
-    password: ''
-    tables: [ watchinsight_otel_traces, watchinsight_otel_metrics, watchinsight_otel_logs ]
-    ttlDays: 3
   elasticsearch:
-    url: 'http://127.0.0.1:8080'
-    index: 'watchinsight'
+
