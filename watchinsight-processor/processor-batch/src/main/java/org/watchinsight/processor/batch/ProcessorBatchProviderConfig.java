@@ -26,4 +26,6 @@ import org.watchinsight.core.provider.ProviderConfig;
  */
 public class ProcessorBatchProviderConfig implements ProviderConfig {
 
+    private int size = 1000;
+    
 }
