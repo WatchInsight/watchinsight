@@ -24,6 +24,6 @@ import org.watchinsight.core.processor.BatchProcessor;
  * @author Created by gerry
  * @date 2023-04-11-23:32
  */
-public class TraceProcessor implements BatchProcessor {
+public class TraceBatchProcessor implements BatchProcessor {
 
 }
